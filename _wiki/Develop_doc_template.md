@@ -3,7 +3,7 @@ layout: post
 title: 开发文档模板
 categories: Template
 description: SF19A28项目开发文档参考模板
-keywords: SF19A28 
+keywords: SF19A28
 mermaid: true
 ---
 
@@ -36,7 +36,7 @@ mermaid: true
 
 此项目参考文档
 
-- [wiki-markdown](https://siflower.github.io/wiki/markdown/)
+- [wiki-markdown](https://bingchun.github.io/wiki/markdown/)
 
 ### 内部相关
 内部开发的redmine， 提交等

@@ -9,7 +9,7 @@ mermaid: true
 
 # WiFi架构和配置手册
 
-**目录**  
+**目录**
 * TOC
 {:toc}
 
@@ -23,7 +23,7 @@ mermaid: true
 
 ### 1.2 开发环境
 
-- 正常的编译和运行环境，请务必先阅读[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+- 正常的编译和运行环境，请务必先阅读[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 ### 1.3 功能概述
 
@@ -36,7 +36,7 @@ mermaid: true
 
 ### 2.1 编译wifi模块
 
-参考[快速入门](https://siflower.github.io/2020/08/05/quick_start/)，建议先直接编译一次所需镜像，然后使用2.1.2的方法。
+参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)，建议先直接编译一次所需镜像，然后使用2.1.2的方法。
 
 #### 2.1.1 首次编译
 
@@ -69,9 +69,9 @@ CONFIG_PACKAGE_iwinfo=y
 
 如果不是第一次编译，那么可以使用```make menuconfig```然后选中以下内容：
 ```
-Kernel modules ---> Wireless Drivers--->kmod-sf_smac  
+Kernel modules ---> Wireless Drivers--->kmod-sf_smac
 Network--->hostapd-common
-Utilities--->iwinfo  
+Utilities--->iwinfo
 Base system--->dnsmasq
 ```
 修改完成之后保存，在openwrt-18.06目录下使用```make -j V=s```即可编译，镜像位于```bin/siflower/openwrt-siflower-sf16a18-mpw0-squashfs-sysupgrade.bin```。
@@ -111,11 +111,11 @@ config wifi-iface 'default_radio0'
         option group '1'
         option netisolate '0'
 ```
-如图，配置分为两层，由config后的第一个字符串来进行区分。  
+如图，配置分为两层，由config后的第一个字符串来进行区分。
 其中，wifi-device对应具体硬件的wifi驱动设备,我们支持2.4G和5G两种device；wifi-iface对应单个wifi接口，与单个ssid（即wifi名称）相对应，
-一个wifi-device下面可以配置多个wifi-iface，最多支持4个。  
+一个wifi-device下面可以配置多个wifi-iface，最多支持4个。
 
-#### 2.2.2 配置选项说明   
+#### 2.2.2 配置选项说明
 
 ##### 2.2.2.1 wifi-device配置选项
 
@@ -123,7 +123,7 @@ config wifi-iface 'default_radio0'
 
 注：默认值为"/"时表示该选项不一定会出现，只有在进行了某些设置的情况下才会出现；默认值为"-"时表示2.4G和5G有差异，将在描述里进行说明。
 
-  | 选项 |值类型|默认值|描述 |  
+  | 选项 |值类型|默认值|描述 |
   | :---: |:---:|:---:| :---: |
   |wifi-device|string|radio0|驱动设备名称|
   |type|string|mac80211|驱动类型，目前固定为"mac80211"。|
@@ -156,15 +156,15 @@ config wifi-iface 'default_radio0'
   |isolate|boolean|0|连接此wifi的各设备之间是否隔离，1表示隔离，0表示不隔离。|
   |group|int|-|bridge中的分组，各个不同的group之间在bridge中是不能互相访问的。默认2.4G为0，5G为1。|
   |netisolate|boolean|0|如果配置为1，则从该bssid下的设备无法访问同一bridge中其它bssid的设备。|
-  
+
   其他更多选项可参考[openwrt官方配置介绍](https://oldwiki.archive.openwrt.org/doc/uci/wireless)  。
 
-#### 2.2.3 htmode和hwmode对应关系  
+#### 2.2.3 htmode和hwmode对应关系
 
   不同的WiFi协议决定了hwmode、htmode可以配置的选项，下面列举不同模式的配置要求。
 
 ##### 2.2.3.1 2.4G配置
-  
+
   |2.4G模式|配置|描述|
   |:---:|:---:|:---:|
   |11b|option hwmode 11b|该模式下option htmode必须删除<br>该模式下option ht_coex必须删除|
@@ -172,7 +172,7 @@ config wifi-iface 'default_radio0'
   |11n|option hwmode 11g<br>option htmode HT20<br>（或option htmode HT40）<br>option ht_coex 1|当ht_coex的值为1时，处于20MHz/40MHz混合模式；<br>当ht_coex的值为0时，htmode的值就是频宽|
 
 ##### 2.2.3.2 5G配置
-   
+
   |5G模式|配置|描述|
   |:---:|:---:|:---:|
   |11a|option hwmode 11a|该模式下option htmode必须删除<br>该模式下option ht_coex必须删除|
@@ -180,7 +180,7 @@ config wifi-iface 'default_radio0'
   |11ac|option hwmode 11a<br>option htmode VHT20<br>(或option htmode VHT40<br>或option htmode VHT80)|该模式下option ht_coex必须删除|
 
 #### 2.2.4 encryption加密方式
-  
+
   |值|WPA版本|密钥加密协议|
   |:---:|:---:|:---:|
   |psk2+tkip+ccmp<br>psk2+tkip+aes|WPA2 Personal (PSK)|TKIP, CCMP|
@@ -229,8 +229,8 @@ config wifi-iface 'default_radio0'
 
 #### 2.3.1 如何修改配置
 
-1、直接修改配置文件/etc/config/wireless  
-2、通过uci命令修改，参考[config文件配置手册](https://siflower.github.io/2020/09/11/config_setting/)
+1、直接修改配置文件/etc/config/wireless
+2、通过uci命令修改，参考[config文件配置手册](https://bingchun.github.io/2020/09/11/config_setting/)
 
 #### 2.3.2 如何使配置生效
 
@@ -354,11 +354,11 @@ Station d8:9c:67:1f:d4:57 (on wlan0)
 ##### 2.3.4.1 新增ap节点
 
   在/etc/config/wireless中增加一段即可，最简单的一种配置如下：
-  
+
   ```
   config wifi-iface
         option device 'radio0'
-        option network 'lan'  
+        option network 'lan'
         option mode 'ap'
         option ssid 'SiWiFi-new-ap'
         option encryption 'psk2+ccmp'
@@ -426,8 +426,8 @@ index 81e6ac7..fd33cfe 100644
 
 #### 2.4.2 默认配置生成后被应用到哪里？
 
-/etc/config/wirelesss会被netifd和hostapd使用。  
-对于netifd，将直接读取wireless的配置；  
+/etc/config/wirelesss会被netifd和hostapd使用。
+对于netifd，将直接读取wireless的配置；
 对于hostapd，会由脚本/lib/netifd/wireless/mac80211.sh读取配置，生成配置文件/var/run/hostapd-phy*.conf以供hostapd使用，该脚本在源码中位于package/kernel/mac80211/files/lib/netifd/wireless/mac80211.sh。
 
 #### 2.4.3 wifi配置流程图
@@ -462,7 +462,7 @@ graph TD
 
 #### 2.5.2 wifi驱动模块介绍
 
-如果涉及到底层模块问题，那么可以依据5.2节和5.3节来尝试解决。 
+如果涉及到底层模块问题，那么可以依据5.2节和5.3节来尝试解决。
 wifi模块存放在板子上的目录为```/lib/modules/4.14.90/```，在板子启动过程中这些模块会依序自动加载。
 
 ##### 2.5.2.1 wifi驱动相关模块加载流程
@@ -499,10 +499,10 @@ root@OpenWrt:/# sfwifi remove
 [ 1265.345273] lb-fmac 11000000.wifi-lb wlan0: AP Stopped
 [ 1265.354076] hb-fmac 17800000.wifi-hb wlan1: AP Stopped
 [ 1265.361096] lb-fmac 11000000.wifi-lb wlan0: CLOSE
-[ 1265.365990] lmac[0] vif_mgmt_unregister index=0 
+[ 1265.365990] lmac[0] vif_mgmt_unregister index=0
 [ 1265.372896] ieee80211 phy2: HT supp 1, VHT supp 0, HE supp 0
 [ 1265.385397] hb-fmac 17800000.wifi-hb wlan1: CLOSE
-[ 1265.390302] lmac[1] vif_mgmt_unregister index=0 
+[ 1265.390302] lmac[1] vif_mgmt_unregister index=0
 [ 1265.395213] ieee80211 phy3: HT supp 1, VHT supp 1, HE supp 0
 [ 1265.422643] lb-fmac 11000000.wifi-lb wlan0: Remove Interface
 [ 1265.428480] found hnat device to del
@@ -512,14 +512,14 @@ module is not loaded
 module is not loaded
 [ 1265.985021] lmac_glue_stop(0)
 [ 1265.988058] stop_task, 0
-[ 1265.990639] stop aresetn 2 por_resetn 1 
+[ 1265.990639] stop aresetn 2 por_resetn 1
 [ 1265.995617] siwifi_errorinfo_deallocs
 [ 1265.999362] successfully turn off platform 0!
 [ 1266.003894] remove_task, 0
 [ 1266.006665] Now band 2.4G
 [ 1266.123794] lmac_glue_stop(1)
 [ 1266.126841] stop_task, 1
-[ 1266.129512] stop aresetn 2 por_resetn 1 
+[ 1266.129512] stop aresetn 2 por_resetn 1
 [ 1266.134559] siwifi_errorinfo_deallocs
 [ 1266.138311] successfully turn off platform 1!
 [ 1266.143467] remove_task, 1
@@ -533,9 +533,9 @@ module is not loaded
 [ 1266.269822] sf_wifi_rf_remove
 [ 1266.272824] sf_wifi_rf_sysfs_unregister
 [ 1266.277185] sf_wifi_rf_irqs_unregister
-root@OpenWrt:/# 
-root@OpenWrt:/# 
-root@OpenWrt:/# 
+root@OpenWrt:/#
+root@OpenWrt:/#
+root@OpenWrt:/#
 root@OpenWrt:/# sfwifi reload fmac
 [ 1270.574385] startcore init fill all memory!
 [ 1270.599458] irq: type mismatch, failed to map hwirq-194 for /interrupt-controller@1bdc0000!
@@ -594,7 +594,7 @@ root@OpenWrt:/# sfwifi reload fmac
 [ 1272.312941] lmac_glue_start(0)
 [ 1272.316064] start_task, 0
 [ 1272.318698] task entry_addr=0x1f00000
-[ 1272.322362] start aresetn 0 por_resetn 0 
+[ 1272.322362] start aresetn 0 por_resetn 0
 [ 1272.326434] wait lmac init(0)>>>>>>>>>>>>>>>>>>>>>>>
 [ 1272.332566] lmac[0] v6.0.0.0 - build: davy Fri, 06 Nov 2020 15:05:54 +0800 band: 0
 [ 1272.340198] lmac[0] SW profiling configuration:
@@ -676,7 +676,7 @@ root@OpenWrt:/# sfwifi reload fmac
 [ 1272.786820] lmac_glue_start(1)
 [ 1272.789990] start_task, 1
 [ 1272.792724] task entry_addr=0x2000000
-[ 1272.796627] start aresetn 0 por_resetn 0 
+[ 1272.796627] start aresetn 0 por_resetn 0
 [ 1272.800736] wait lmac init(1)>>>>>>>>>>>>>>>>>>>>>>>
 [ 1272.806632] lmac[1] v6.0.0.0 - build: davy Fri, 06 Nov 2020 15:05:54 +0800 band: 1
 [ 1272.814362] lmac[1] SW profiling configuration:
@@ -773,7 +773,7 @@ root@OpenWrt:/# [ 1273.770235] lb-fmac 11000000.wifi-lb wlan0: Remove Interface
 
 ##### 2.5.2.3 设置wifi驱动不自动加载
 
-如果想开机时不自动加载wifi驱动，可用如下方法：  
+如果想开机时不自动加载wifi驱动，可用如下方法：
 
 - 第一步，在package/kernel/sf_smac/config/99_rf_misc注释掉下面这一行
 
@@ -813,7 +813,7 @@ root@OpenWrt:/# [ 1273.770235] lb-fmac 11000000.wifi-lb wlan0: Remove Interface
 ```
 root@OpenWrt:/# iw wlan0 info | grep ssid
         ssid SiWiFi-22a4-2.4G
-root@OpenWrt:/# 
+root@OpenWrt:/#
 root@OpenWrt:/# uci set wireless.default_radio0.ssid='SiWiFi-new-ssid'
 root@OpenWrt:/# uci commit wireless
 root@OpenWrt:/# wifi reload
@@ -831,10 +831,10 @@ root@OpenWrt:/# [76113.763507] wlan0: transmit a DEAUTH frame to ff:ff:ff:ff:ff:
 [76122.741016] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
 [76122.748100] br-lan: port 3(wlan0) entered blocking state
 [76122.753524] br-lan: port 3(wlan0) entered forwarding state
-root@OpenWrt:/# 
+root@OpenWrt:/#
 root@OpenWrt:/# iw wlan0 info | grep ssid
         ssid SiWiFi-new-ssid
-root@OpenWrt:/# 
+root@OpenWrt:/#
 ```
 
 
@@ -943,10 +943,10 @@ root@OpenWrt:/# sfwifi stress fmac
 [ 1585.955178] br-lan: port 2(wlan0) entered disabled state
 [ 1585.995783] lb-fmac 11000000.wifi-lb wlan0: AP Stopped
 [ 1586.009341] hb-fmac 17800000.wifi-hb wlan1: CLOSE
-[ 1586.014298] lmac[1] vif_mgmt_unregister index=0 
+[ 1586.014298] lmac[1] vif_mgmt_unregister index=0
 [ 1586.021136] ieee80211 phy5: HT supp 1, VHT supp 1, HE supp 0
 [ 1586.031352] lb-fmac 11000000.wifi-lb wlan0: CLOSE
-[ 1586.036255] lmac[0] vif_mgmt_unregister index=0 
+[ 1586.036255] lmac[0] vif_mgmt_unregister index=0
 [ 1586.043446] ieee80211 phy4: HT supp 1, VHT supp 0, HE supp 0
 [ 1586.070280] hb-fmac 17800000.wifi-hb wlan1: Remove Interface
 [ 1586.076138] found hnat device to del
@@ -956,14 +956,14 @@ module is not loaded
 module is not loaded
 [ 1586.763830] lmac_glue_stop(0)
 [ 1586.766879] stop_task, 0
-[ 1586.769467] stop aresetn 2 por_resetn 1 
+[ 1586.769467] stop aresetn 2 por_resetn 1
 [ 1586.774538] siwifi_errorinfo_deallocs
 [ 1586.778317] successfully turn off platform 0!
 [ 1586.782894] remove_task, 0
 [ 1586.785877] Now band 2.4G
 [ 1586.893754] lmac_glue_stop(1)
 [ 1586.896789] stop_task, 1
-[ 1586.899376] stop aresetn 2 por_resetn 1 
+[ 1586.899376] stop aresetn 2 por_resetn 1
 [ 1586.904371] siwifi_errorinfo_deallocs
 [ 1586.908113] successfully turn off platform 1!
 [ 1586.913185] remove_task, 1
@@ -1034,7 +1034,7 @@ module is not loaded
 [ 1589.932987] lmac_glue_start(0)
 [ 1589.936135] start_task, 0
 [ 1589.938777] task entry_addr=0x1f00000
-[ 1589.942445] start aresetn 0 por_resetn 0 
+[ 1589.942445] start aresetn 0 por_resetn 0
 [ 1589.946532] wait lmac init(0)>>>>>>>>>>>>>>>>>>>>>>>
 [ 1589.952662] lmac[0] v6.0.0.0 - build: davy Fri, 06 Nov 2020 15:05:54 +0800 band: 0
 [ 1589.960282] lmac[0] SW profiling configuration:
@@ -1116,7 +1116,7 @@ module is not loaded
 [ 1590.402056] lmac_glue_start(1)
 [ 1590.405300] start_task, 1
 [ 1590.408024] task entry_addr=0x2000000
-[ 1590.411764] start aresetn 0 por_resetn 0 
+[ 1590.411764] start aresetn 0 por_resetn 0
 [ 1590.415968] wait lmac init(1)>>>>>>>>>>>>>>>>>>>>>>>
 [ 1590.421835] lmac[1] v6.0.0.0 - build: davy Fri, 06 Nov 2020 15:05:54 +0800 band: 1
 [ 1590.429516] lmac[1] SW profiling configuration:
@@ -1333,7 +1333,7 @@ TCP window size: 85.3 KByte (default)
 [  206.829558] sfi0: associated
 [  206.855907] IPv6: ADDRCONF(NETDEV_CHANGE): sfi0: link becomes ready
 
-root@OpenWrt:/# 
+root@OpenWrt:/#
 root@OpenWrt:/# run-wifi.sh master
 bind failed: Address in use
 ------------------------------------------------------------

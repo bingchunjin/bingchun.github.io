@@ -41,11 +41,11 @@ graph TB
   A(GMAC-HNAT<br>千兆MAC) --> |connect| B[GPHY]
   A --> |connect| C[GSWITCH]
 ```
-GMAC-HNAT: 表示Siflower的千兆MAC, 其包含了HNAT硬件地址转换模块；  
-HNAT模块介绍参考: [HNAT对接和使用手册](https://siflower.github.io/2020/09/11/hnat_use_guide/)　　
-GPHY: 表示外围千兆PHY, 包含不同厂家的PHY芯片；  
-GSWITCH: 表示外围千兆SWITCH, 包含不同厂家的SWITCH芯片；  
-支持的外围芯片型号列表见: [支持的外围芯片列表](#支持的外围芯片列表)    
+GMAC-HNAT: 表示Siflower的千兆MAC, 其包含了HNAT硬件地址转换模块；
+HNAT模块介绍参考: [HNAT对接和使用手册](https://bingchun.github.io/2020/09/11/hnat_use_guide/)　　
+GPHY: 表示外围千兆PHY, 包含不同厂家的PHY芯片；
+GSWITCH: 表示外围千兆SWITCH, 包含不同厂家的SWITCH芯片；
+支持的外围芯片型号列表见: [支持的外围芯片列表](#支持的外围芯片列表)
 
 ### 软件服务
 
@@ -72,7 +72,7 @@ graph TB
   D -->  E[lua接口更新在线设备列表]
   E -->  F[网页正确显示设备在线状态]
   D -->  G[lua接口将消息通知给APP]
-  G -->  H[APP通知用户设备上下线]  
+  G -->  H[APP通知用户设备上下线]
 ```
 
 设备上下线示例：
@@ -91,7 +91,7 @@ Wed Aug 26 16:42:44 2020 user.crit : dps_check_newdev_process has finished!
 
 #### VLAN划分
 
-参考: [以太网WAN-LAN划分指南](https://siflower.github.io/2020/09/05/ethernet_wan_lan_division/)  
+参考: [以太网WAN-LAN划分指南](https://bingchun.github.io/2020/09/05/ethernet_wan_lan_division/)
 
 #### Ethtool速度双工设置
 
@@ -99,7 +99,7 @@ Wed Aug 26 16:42:44 2020 user.crit : dps_check_newdev_process has finished!
 
 #### WAN-LAN自适应
 
-参考: [wan-lan自适应开发手册](https://siflower.github.io/2020/09/11/wan_lan_auto_adapt/) 
+参考: [wan-lan自适应开发手册](https://bingchun.github.io/2020/09/11/wan_lan_auto_adapt/)
 
 #### TS流量统计
 
@@ -109,7 +109,7 @@ TS全称为Traffic Statistic，用于针对设备进行流量统计，主要原�
 
 ### 环境搭建
 
-参考：[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+参考：[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 ### 对外提供的接口
 
@@ -121,28 +121,28 @@ TS全称为Traffic Statistic，用于针对设备进行流量统计，主要原�
 
 我们提供的net_device_ops接口为标准接口，如下：
 ```
-static const struct net_device_ops sgmac_netdev_ops = {    
-        .ndo_open = sgmac_open,                            
-        .ndo_start_xmit = sgmac_xmit,                      
-        .ndo_stop = sgmac_stop,                            
-        .ndo_change_mtu = sgmac_change_mtu,                
-        .ndo_set_rx_mode = sgmac_set_rx_mode,              
-        .ndo_tx_timeout = sgmac_tx_timeout,                
-        .ndo_get_stats64 = sgmac_get_stats64,              
-        .ndo_do_ioctl = sgmac_do_ioctl,                    
-#ifdef CONFIG_NET_POLL_CONTROLLER                          
-        .ndo_poll_controller = sgmac_poll_controller,      
-#endif                                                     
-        .ndo_validate_addr = eth_validate_addr,            
-        .ndo_set_mac_address = sgmac_set_mac_address,      
-        .ndo_vlan_rx_add_vid = sgmac_vlan_rx_add_vid,      
-        .ndo_vlan_rx_kill_vid = sgmac_vlan_rx_kill_vid,    
-        .ndo_set_features = sgmac_set_features,            
-#if IS_ENABLED(CONFIG_NF_FLOW_TABLE)                       
+static const struct net_device_ops sgmac_netdev_ops = {
+        .ndo_open = sgmac_open,
+        .ndo_start_xmit = sgmac_xmit,
+        .ndo_stop = sgmac_stop,
+        .ndo_change_mtu = sgmac_change_mtu,
+        .ndo_set_rx_mode = sgmac_set_rx_mode,
+        .ndo_tx_timeout = sgmac_tx_timeout,
+        .ndo_get_stats64 = sgmac_get_stats64,
+        .ndo_do_ioctl = sgmac_do_ioctl,
+#ifdef CONFIG_NET_POLL_CONTROLLER
+        .ndo_poll_controller = sgmac_poll_controller,
+#endif
+        .ndo_validate_addr = eth_validate_addr,
+        .ndo_set_mac_address = sgmac_set_mac_address,
+        .ndo_vlan_rx_add_vid = sgmac_vlan_rx_add_vid,
+        .ndo_vlan_rx_kill_vid = sgmac_vlan_rx_kill_vid,
+        .ndo_set_features = sgmac_set_features,
+#if IS_ENABLED(CONFIG_NF_FLOW_TABLE)
     .ndo_flow_offload_check = sgmac_ndo_flow_offload_check,
-    .ndo_flow_offload = sgmac_ndo_flow_offload,            
-#endif                                                     
-};                                                         
+    .ndo_flow_offload = sgmac_ndo_flow_offload,
+#endif
+};
 ```
 
 ##### switch_dev_ops接口
@@ -169,7 +169,7 @@ static const struct net_device_ops sgmac_netdev_ops = {
     .set_port_pvid = intel7084_set_port_pvid,
     .get_port_link = intel7084_get_port_link,
     .reset_switch = intel7084_reset_switch,
-};                                                    
+};
 ```
 
 ##### ethtool_ops接口
@@ -178,39 +178,39 @@ static const struct net_device_ops sgmac_netdev_ops = {
 * GPHY Ethtool支持
   * 支持的标准接口如下：
   ```
-  static const struct ethtool_ops sgmac_ethtool_ops = {     
-    .get_drvinfo = sgmac_ethtool_get_drvinfo,             
-    .get_link = ethtool_op_get_link,                      
-    .get_pauseparam = sgmac_ethtool_get_pauseparam,       
-    .set_pauseparam = sgmac_ethtool_set_pauseparam,       
-    .get_ethtool_stats = sgmac_ethtool_get_ethtool_stats, 
-    .get_strings = sgmac_ethtool_get_strings,             
-    .get_wol = sgmac_ethtool_get_wol,                     
-    .set_wol = sgmac_ethtool_set_wol,                     
-    .get_sset_count = sgmac_ethtool_get_sset_count,       
-    .get_regs_len = sgmac_ethtool_get_regs_len,           
-    .get_regs = sgmac_ethtool_gregs,                      
-    .nway_reset = sgmac_nway_reset,                       
-    .get_link_ksettings = phy_ethtool_get_link_ksettings, 
-    .set_link_ksettings = phy_ethtool_set_link_ksettings, 
-  };                                                        
+  static const struct ethtool_ops sgmac_ethtool_ops = {
+    .get_drvinfo = sgmac_ethtool_get_drvinfo,
+    .get_link = ethtool_op_get_link,
+    .get_pauseparam = sgmac_ethtool_get_pauseparam,
+    .set_pauseparam = sgmac_ethtool_set_pauseparam,
+    .get_ethtool_stats = sgmac_ethtool_get_ethtool_stats,
+    .get_strings = sgmac_ethtool_get_strings,
+    .get_wol = sgmac_ethtool_get_wol,
+    .set_wol = sgmac_ethtool_set_wol,
+    .get_sset_count = sgmac_ethtool_get_sset_count,
+    .get_regs_len = sgmac_ethtool_get_regs_len,
+    .get_regs = sgmac_ethtool_gregs,
+    .nway_reset = sgmac_nway_reset,
+    .get_link_ksettings = phy_ethtool_get_link_ksettings,
+    .set_link_ksettings = phy_ethtool_set_link_ksettings,
+  };
   ```
   * 使用方法：
   标准ethtool使用方法，可通过```ethtool -h```查看ethtool使用方法；
 * GSWITCH Ethtool支持
   * 支持的标准接口如下：
   ```
-  struct ethtool_ops gswitch_ethtool_ops = {              
-        .get_settings           = gsw_get_settings,     
-        .set_settings           = gsw_set_settings,     
-        .get_drvinfo            = gsw_get_drvinfo,      
-        .get_sset_count         = gsw_get_sset_count,   
+  struct ethtool_ops gswitch_ethtool_ops = {
+        .get_settings           = gsw_get_settings,
+        .set_settings           = gsw_set_settings,
+        .get_drvinfo            = gsw_get_drvinfo,
+        .get_sset_count         = gsw_get_sset_count,
         .get_ethtool_stats      = gsw_get_ethtool_stats,
-        .get_strings            = gsw_get_strings,      
-        .get_link               = ethtool_op_get_link,  
-        .nway_reset             = gsw_nway_reset,       
-        .get_ringparam          = gsw_get_ringparam,    
-  };                                                      
+        .get_strings            = gsw_get_strings,
+        .get_link               = ethtool_op_get_link,
+        .nway_reset             = gsw_nway_reset,
+        .get_ringparam          = gsw_get_ringparam,
+  };
   ```
   * 使用方法：
     * 获取指定phy速度双工：
@@ -219,14 +219,14 @@ static const struct net_device_ops sgmac_netdev_ops = {
       echo phyad phyid > /sys/kernel/debug/gmac_debug
       ethtool eth0
       ```
-      第一条命令：第一个参数phyad为固定字符串，表示选用此功能，第二个phyid为指定phy的id，取值0～5，表示指定phy；  
-      第二条命令：为标准ethtool获取速度双工命令，参数eth0为网卡名；  
+      第一条命令：第一个参数phyad为固定字符串，表示选用此功能，第二个phyid为指定phy的id，取值0～5，表示指定phy；
+      第二条命令：为标准ethtool获取速度双工命令，参数eth0为网卡名；
     * 设置指定phy速度双工：
       命令：
       ```
       ethtool -s eth0 speed 1000 duplex full phyad 3
       ```
-      前面部分为标准ethtool设置速度双工命令，最后一个参数phyid为指定phy的id，取值0～5，为必填参数；  
+      前面部分为标准ethtool设置速度双工命令，最后一个参数phyid为指定phy的id，取值0～5，为必填参数；
 
 #### 私有接口
 
@@ -234,14 +234,14 @@ static const struct net_device_ops sgmac_netdev_ops = {
 
 **示例：**
 
-- 获取所有接口的帮助信息:  
-  命令:  
-  ```echo help > /sys/kernel/debug/esw_debug```  
-  结果展示如下:  
+- 获取所有接口的帮助信息:
+  命令:
+  ```echo help > /sys/kernel/debug/esw_debug```
+  结果展示如下:
   ```
   echo help > /sys/kernel/debug/esw_debug
   Attention: all example should append with '>  /sys/kernel/debug/esw_debug'
-  read/write switch reg, no value for read, witch value for write 
+  read/write switch reg, no value for read, witch value for write
   example: echo rwReg             [addr] [value] ,for realtek switch
   example: echo rwReg             [addr] [shift] [size] [value] ,for intel switch
   read/write switch phy reg, no value for read, witch value for write, support both intel/realtek switch
@@ -249,9 +249,9 @@ static const struct net_device_ops sgmac_netdev_ops = {
   set switch port egress mode, 0 for org, 1 for keep, only support realtek switch now
   example: echo setPortEgressMode [port] [mode]
   dump switch port tx/rx count, only support intel switch now
-  example: echo dumpSwitchCount           [port]          
+  example: echo dumpSwitchCount           [port]
   clear switch port tx/rx count, only support intel switch now
-  example: echo clearSwitchCount          [port]          
+  example: echo clearSwitchCount          [port]
   enable software multicast function, only support intel switch now
   example: echo enableMulticastFunc
   port join/leave mc_ip group, only support intel switch now
@@ -262,10 +262,10 @@ static const struct net_device_ops sgmac_netdev_ops = {
 
 展示部分intel switch接口使用示例如下：　　
 
-- 获取当前phylink状态：  
-  命令：  
-  ```cat /sys/kernel/debug/esw_debug```  
-  结果展示如下：  
+- 获取当前phylink状态：
+  命令：
+  ```cat /sys/kernel/debug/esw_debug```
+  结果展示如下：
   ```
   root@OpenWrt:/# cat /sys/kernel/debug/esw_debug
   check phy link status
@@ -276,36 +276,36 @@ static const struct net_device_ops sgmac_netdev_ops = {
   root@OpenWrt:/#
   ```
 
-- 读写gswitch内部寄存器：  
-  读命令：  
-  ```echo rwReg [addr] [shift] [size] > /sys/kernel/debug/esw_debug```  
-  第一个参数表示读写寄存器，第二个为读取的寄存器地址，第三个为寄存器bit位地址偏移量，第四个为读取的bit位长度；  
+- 读写gswitch内部寄存器：
+  读命令：
+  ```echo rwReg [addr] [shift] [size] > /sys/kernel/debug/esw_debug```
+  第一个参数表示读写寄存器，第二个为读取的寄存器地址，第三个为寄存器bit位地址偏移量，第四个为读取的bit位长度；
 
-  写命令：  
-  ```echo rwReg [addr] [shift] [size] [value] > /sys/kernel/debug/esw_debug```  
-   第一个参数表示读写寄存器，第二个为读取的寄存器地址，第三个为寄存器bit位地址偏移量，第四个为读取的bit位长度，第五个参数为写入的值；  
+  写命令：
+  ```echo rwReg [addr] [shift] [size] [value] > /sys/kernel/debug/esw_debug```
+   第一个参数表示读写寄存器，第二个为读取的寄存器地址，第三个为寄存器bit位地址偏移量，第四个为读取的bit位长度，第五个参数为写入的值；
 
-  示例:  
+  示例:
   ![intel_reg_rw](/assets/images/switch_img/intel_mdio_rw.png)
 
-- 读写gswitch外围通用phy寄存器：  
-  读命令：  
-  ```echo rwPHYReg [port] [addr] > /sys/kernel/debug/esw_debug```  
+- 读写gswitch外围通用phy寄存器：
+  读命令：
+  ```echo rwPHYReg [port] [addr] > /sys/kernel/debug/esw_debug```
   第一个参数为选用此功能，第二个为phy的id，第三个为读取的寄存器地址；
 
-  写命令：  
-  ```echo rwPHYReg [port] [addr] [value] > /sys/kernel/debug/esw_debug```  
-  第一个参数为选用此功能，第二个为phy的id，第三个为写寄存器的地址，第四个参数为写入的值；  
+  写命令：
+  ```echo rwPHYReg [port] [addr] [value] > /sys/kernel/debug/esw_debug```
+  第一个参数为选用此功能，第二个为phy的id，第三个为写寄存器的地址，第四个参数为写入的值；
 
-  示例:  
+  示例:
   ![intel_reg_rw](/assets/images/switch_img/intel_rwPHYReg.png)
 
 展示部分realtek switch接口使用示例如下：
 
-- 获取当前phylink状态：  
-  命令：  
-  ```cat /sys/kernel/debug/esw_debug```  
-  结果展示如下：  
+- 获取当前phylink状态：
+  命令：
+  ```cat /sys/kernel/debug/esw_debug```
+  结果展示如下：
   ```
   root@OpenWrt:/# cat /sys/kernel/debug/esw_debug
   check phy link status
@@ -317,28 +317,28 @@ static const struct net_device_ops sgmac_netdev_ops = {
   root@OpenWrt:/#
   ```
 
-- 读写gswitch内部寄存器：  
-  读命令：  
-  ```echo rwReg [addr] > /sys/kernel/debug/esw_debug```  
-  第一个参数表示读写寄存器，第二个为读取的寄存器地址；  
+- 读写gswitch内部寄存器：
+  读命令：
+  ```echo rwReg [addr] > /sys/kernel/debug/esw_debug```
+  第一个参数表示读写寄存器，第二个为读取的寄存器地址；
 
-  写命令：  
-  ```echo rwReg [addr] [value] > /sys/kernel/debug/esw_debug```  
-   第一个参数表示读写寄存器，第二个为读取的寄存器地址，第三个参数为写入的值；  
+  写命令：
+  ```echo rwReg [addr] [value] > /sys/kernel/debug/esw_debug```
+   第一个参数表示读写寄存器，第二个为读取的寄存器地址，第三个参数为写入的值；
 
-  示例:  
+  示例:
   ![rtk_reg_rw](/assets/images/switch_img/rtk_mdio_rw.png)
 
-- 读写gswitch外围通用phy寄存器：  
-  读命令：  
-  ```echo rwPHYReg [port] [addr] > /sys/kernel/debug/esw_debug```  
+- 读写gswitch外围通用phy寄存器：
+  读命令：
+  ```echo rwPHYReg [port] [addr] > /sys/kernel/debug/esw_debug```
   第一个参数为选用此功能，第二个为phy的id，第三个为读取的寄存器地址；
 
-  写命令：  
-  ```echo rwPHYReg [port] [addr] [value] > /sys/kernel/debug/esw_debug```  
-  第一个参数为选用此功能，第二个为phy的id，第三个为写寄存器的地址，第四个参数为写入的值；  
+  写命令：
+  ```echo rwPHYReg [port] [addr] [value] > /sys/kernel/debug/esw_debug```
+  第一个参数为选用此功能，第二个为phy的id，第三个为写寄存器的地址，第四个参数为写入的值；
 
-  示例:  
+  示例:
   ![rtk_reg_rw](/assets/images/switch_img/rtk_rwPHYReg.png)
 
 #### 支持的外围芯片列表
@@ -356,9 +356,9 @@ static const struct net_device_ops sgmac_netdev_ops = {
 
 ### 参考文档
 
-[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
-[HNAT对接和使用手册](https://siflower.github.io/2020/09/11/hnat_use_guide/)
-[以太网WAN-LAN划分指南](https://siflower.github.io/2020/09/05/ethernet_wan_lan_division/)
-[wan-lan自适应开发手册](https://siflower.github.io/2020/09/11/wan_lan_auto_adapt/)
+[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
+[HNAT对接和使用手册](https://bingchun.github.io/2020/09/11/hnat_use_guide/)
+[以太网WAN-LAN划分指南](https://bingchun.github.io/2020/09/05/ethernet_wan_lan_division/)
+[wan-lan自适应开发手册](https://bingchun.github.io/2020/09/11/wan_lan_auto_adapt/)
 
 ## FAQ

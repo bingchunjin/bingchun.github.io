@@ -22,7 +22,7 @@ mermaid: true
 
 ## 开发环境
 
-openwrt系统编译环境，环境搭建参考：[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+openwrt系统编译环境，环境搭建参考：[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 开发板调试环境
 
@@ -36,7 +36,7 @@ openwrt系统编译环境，环境搭建参考：[快速入门](https://siflower
 
 ### uboot引入新版型
 
-uboot引入新版型详细可以参考：[U-boot开发手册](https://siflower.github.io/2020/09/08/ubootDevelopmentManual/)
+uboot引入新版型详细可以参考：[U-boot开发手册](https://bingchun.github.io/2020/09/08/ubootDevelopmentManual/)
 
 ### Openwrt引入新版型
 
@@ -44,25 +44,25 @@ Openwrt引入新版型包含系统和内核两部分。
 
 #### openwrt关于不同版型的配置介绍
 
-所有关于版型的配置内容统一归类在target目录下。  
-siflower芯片相关配置在target/linux/siflower目录下。  
+所有关于版型的配置内容统一归类在target目录下。
+siflower芯片相关配置在target/linux/siflower目录下。
 
-其中sf16a18-fullmask 目录代表了量产芯片sf16a18的配置目录  
+其中sf16a18-fullmask 目录代表了量产芯片sf16a18的配置目录
 ![sf16a18-fullmask](/assets/images/new_board_guide/sf16a18-fullmask.png)
 
-其中sf19a28-fullmask 目录代表了量产芯片sf19a2890的配置目录  
+其中sf19a28-fullmask 目录代表了量产芯片sf19a2890的配置目录
 ![sf19a28-fullmask](/assets/images/new_board_guide/sf19a28-fullmask.png)
 
-**config-4.14_ac28_v5**  
-表示了不同版型对应kernel config，此文件由make kernel_menuconfig 生成  
+**config-4.14_ac28_v5**
+表示了不同版型对应kernel config，此文件由make kernel_menuconfig 生成
 
-**base-files-SF19A28-AC28-V5**  
+**base-files-SF19A28-AC28-V5**
 表示针对AC28-V5这个版型，需要预留在rootfs下的文件
 
 **profiles**
 该目录下面存放每个版型对应的mk文件，这边可以增加一些配置，在编译过程中生效，包含选择软件包和config项，这里制定了**版型的名称**和描述内容。
 
-**base-files** 
+**base-files**
 目录用于存放用户希望预先存放到rootfs下指定路径的文件
 
 ![sf19a28-basefile](/assets/images/new_board_guide/sf19a28-basefile.png)
@@ -98,10 +98,10 @@ sf19a28_fullmask_ac28_v5.dts为ac28_v5版型配置项。
 
   ![ac28-v5-mk](/assets/images/new_board_guide/ac28-v5-mk.png)
 
-- 根据需要，决定是否建立target/linux/siflower/sf19a28-fullmask/base-files-SF19A28-AC28-V5 目录，放置额外文件,注意文件夹名称统一。  
+- 根据需要，决定是否建立target/linux/siflower/sf19a28-fullmask/base-files-SF19A28-AC28-V5 目录，放置额外文件,注意文件夹名称统一。
   ![ac28-v5-basefile](/assets/images/new_board_guide/ac28-v5-basefile.png)
 
-- 在target/linux/siflower/sf19a28-fullmask/目录下复制其他版型的kernel config文件作为新板型的kernel config文件，后续在kernel部分会进行修改。  
+- 在target/linux/siflower/sf19a28-fullmask/目录下复制其他版型的kernel config文件作为新板型的kernel config文件，后续在kernel部分会进行修改。
   ![ac28-v5-kconfig](/assets/images/new_board_guide/ac28-v5-kconfig.png)
 
 - 下面进入target/linux/siflower 目录
@@ -125,21 +125,21 @@ sf19a28_fullmask_ac28_v5.dts为ac28_v5版型配置项。
 
 - 如下界面中选择新添加的版型。
   ![ac28-v5-menuconfig](/assets/images/new_board_guide/ac28-v5-menuconfig.png)
-  保存配置后并退出。  
+  保存配置后并退出。
 
-  **注意：如果make menuconfig选择时没有新版型选项，请在openwrt根目录下，删除tmp/ 和 .config**  
+  **注意：如果make menuconfig选择时没有新版型选项，请在openwrt根目录下，删除tmp/ 和 .config**
   **然后重新拷贝新建版型配置为 .config,再进行make menuconfig即可**
 
-- 保存最终配置  
+- 保存最终配置
   ![ac28-v5-copy2](/assets/images/new_board_guide/ac28-v5-copy2.png)
   将生成的config文件覆盖回target目录下的文件，使配置永久保存。
 
 ##### 差异配置引入
 
-在target/linux/siflower/sf19a28-fullmask/下有各个版型的差异化配置，如base-files-SF19A28-AC28-V5，其包含了不同版型的差异化配置，如生成network配置文件的关键脚本01_network，因为硬件差异其配置可能略有不同。  
+在target/linux/siflower/sf19a28-fullmask/下有各个版型的差异化配置，如base-files-SF19A28-AC28-V5，其包含了不同版型的差异化配置，如生成network配置文件的关键脚本01_network，因为硬件差异其配置可能略有不同。
 
-network和wireless两个配置文件是新版型引入的关键配置，因为其决定了产品有线和无线的可用性，是产品的关键所在，所以了解其生成和配置差异尤为重要。  
-其中关于上述2个配置文件的详细内容和参数说明可参考：[config文件配置手册](https://siflower.github.io/2020/09/11/config_setting/)  
+network和wireless两个配置文件是新版型引入的关键配置，因为其决定了产品有线和无线的可用性，是产品的关键所在，所以了解其生成和配置差异尤为重要。
+其中关于上述2个配置文件的详细内容和参数说明可参考：[config文件配置手册](https://bingchun.github.io/2020/09/11/config_setting/)
 其中network、wireless配置文件的生成流程如下：
 ```mermaid
 graph TB
@@ -188,7 +188,7 @@ linux需要增加相应的dts文件和Kconfig选项。
 ![ac28-v5-dtsKconfig](/assets/images/new_board_guide/ac28-v5-dtsKconfig.png)
 
 - 最后回到**openwrt根目录**下使用命令
-  
+
 ![ac28-v5-kmconfigCMD](/assets/images/new_board_guide/ac28-v5-kmconfigCMD.png)
 
 在下图中选择对应的新的DTS，并且保存退出
@@ -203,21 +203,21 @@ linux需要增加相应的dts文件和Kconfig选项。
 
 #### 烧录编译出来的镜像
 
-参考[快速入门](https://siflower.github.io/2020/08/05/quick_start/) 镜像更新章节
+参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start/) 镜像更新章节
 
 注意：第一次烧录镜像到新板子之后，需要调一下rgmii接口的delay值以及确认switch gpio reset脚gpio
 
-方法参考[外围switch对接和使用手册](https://siflower.github.io/2020/09/11/new_switch_import_guide/)  
- ```3.1 对接准备``` 第4点 switch的reset   
+方法参考[外围switch对接和使用手册](https://bingchun.github.io/2020/09/11/new_switch_import_guide/)
+ ```3.1 对接准备``` 第4点 switch的reset
  ```3.1 对接准备``` 第7点 调整tx/rx delay
 
  设置验证好之后保存相关配置，重新编译镜像烧录即可。
- 
+
 ## 项目引用
 
 ### 参考文档
 
-[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 
 ## 开发详情
@@ -263,11 +263,11 @@ Makefile组织
 
 ## 测试用例
 
-编译好镜像，烧录完成后，可以进行基础有线/无线上网测试，基础网页设置测试等，可参考：[以太网测试介绍](https://siflower.github.io/2020/09/08/ethernetTestGuide/)。
+编译好镜像，烧录完成后，可以进行基础有线/无线上网测试，基础网页设置测试等，可参考：[以太网测试介绍](https://bingchun.github.io/2020/09/08/ethernetTestGuide/)。
 
 ### 测试环境配置
 
-编译好对应板型镜像后，烧录测试即可，烧录方法见：[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+编译好对应板型镜像后，烧录测试即可，烧录方法见：[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 ### 测试流程和测试结果
 

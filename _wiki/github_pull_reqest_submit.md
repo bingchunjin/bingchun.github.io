@@ -48,7 +48,7 @@ G--失败-->D
 ```
 详细步骤：
 
-- 登录github网站后，点击https://github.com/Siflower/siflower.github.io，并点击页面fork按钮，将改代码仓库fork 到自己的github账号中。
+- 登录github网站后，点击https://github.com/Siflower/bingchun.github.io，并点击页面fork按钮，将改代码仓库fork 到自己的github账号中。
 ![fork](/assets/images/github/fork.png)
 
 - fork 成功之后，进入自己的github 账号仓库页面，找到对应的github仓库，git   clone 到本地。
@@ -90,7 +90,7 @@ chore：构建过程或辅助工具的变动
 
 ![remote](/assets/images/github/remote.png)
 
-- 设置siflower仓库为本地仓库的upstream, 
+- 设置siflower仓库为本地仓库的upstream,
 
 ![upstream](/assets/images/github/upstream.png)
 
@@ -113,14 +113,14 @@ git rebase master
 - 进入pull request选项之后，选择好对应的仓库和分支
 
 ![last](/assets/images/github/last.png)
-  
+
 此时提交，就可以想siflower仓库提交此次开发的pull request，等待审核通过。
 
 
 ## FAQ
 
 - 为什么要和siflower仓库进行一次同步？
-  
+
   为了保证此次需要合并的提交，和现在最新的siflower仓库没有冲突，可以合入。
 
 - 开发完成后，如何处理开发分支

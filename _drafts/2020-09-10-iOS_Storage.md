@@ -47,15 +47,15 @@ SiFlower、矽昌和矽昌其它商标均为上海矽昌微电子有限公司的
 在开发前，您需要:
 
   * 熟悉相关硬件产品的功能和使用
-  
+
   * 硬件产品支持USB存储功能
 
-  * 使用SiWiFi Openwrt SDK完成产品固件的调试  [快速入门](https://siflower.github.io/2020/08/05/quick_start/)
-  
-  * 完成 [iOS SDK集成](https://siflower.github.io/2020/08/05/iOS_SDK/)
+  * 使用SiWiFi Openwrt SDK完成产品固件的调试  [快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
+
+  * 完成 [iOS SDK集成](https://bingchun.github.io/2020/08/05/iOS_SDK/)
 
   * 了解iOS App开发、上线、samba协议、流媒体文件播放等
- 
+
 ## SDK 存储功能提供内容
 
 通过SDK提供的存储功能API实现对矽昌路由器产品在局域网状态下读写USB存储设备中的内容，如：
@@ -76,7 +76,7 @@ SiFlower、矽昌和矽昌其它商标均为上海矽昌微电子有限公司的
 ## 资源包导入
 
 在集成存储功能SDK时需要将SiRouterApi.framework导入到项目中。使用过程中可直接将SiRouterApi.framework文件直接拖入项目中即可，同时，注意在项目的Build Phases->Embed Frameworks中添加framwork，如下图所示：
-   
+
 ![set_framework](/assets/images/iOS-SDK-Storage/ios-sdk-usb-framework.png)
 
 ## SDK依赖库
@@ -85,7 +85,7 @@ SDK导入完成后需要在项目中添加相关依赖系统库:
 
 ![capabilities](/assets/images/iOS-SDK-Storage/ios-sdk-usb-lib.png)
 
-更多关于SDK集成和使用，请参考[iOS SDK集成指南](https://siflower.github.io/2020/08/05/iOS_SDK/)
+更多关于SDK集成和使用，请参考[iOS SDK集成指南](https://bingchun.github.io/2020/08/05/iOS_SDK/)
 
 # 存储功能使用
 
@@ -126,16 +126,16 @@ SFSMBProvider *provider = [SFSMBProvider sharedSmbProvider];
     {
         return nil;
     }
-    
+
     SFSMBAuth *auth = _cachedAuths[server.uppercaseString];
     if (auth) {
-        
+
         NSLog(@"cached auth for %@ -> %@ (%@) %@:%@", server, share, auth.workgroup, auth.username, auth.password);
         return auth;
     }
-    
+
     NSLog(@"ask auth for %@/%@ (%@)", server, share, workgroup);
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         //跳转至认证界面，并输入认证信息
         [self presentSmbAuthViewControllerForServer:server
@@ -143,7 +143,7 @@ SFSMBProvider *provider = [SFSMBProvider sharedSmbProvider];
                                           workgroup:workgroup
                                            username:username];
     });
-    
+
     return nil;
 }
 
@@ -200,7 +200,7 @@ SFSMBProvider *provider = [SFSMBProvider sharedSmbProvider];
 
 ```
 [[SFSMBProvider sharedSmbProvider] removeAtPath:item.path auth:_defaultAuth block:^(id result) {
-                    
+
     NSLog(@"Remove completed:%@", result);
     if (result == nil) {
         NSLog(@"remove error");
@@ -270,11 +270,11 @@ NSString *path = [_path stringByAppendingSMBPathComponent:folderName];
     SFSMBProvider *provider = [SFSMBProvider sharedSmbProvider];
     id result = [provider createFolderAtPath:path auth:_defaultAuth];
     if ([result isKindOfClass:[SFSMBItemTree class]]) {
-        
+
         NSMutableArray *ma = [_items mutableCopy];
         [ma addObject:result];
         _items = [ma copy];
-        
+
     } else {
         NSLog(@"%@", result);
     }
@@ -292,11 +292,11 @@ NSString *path = [_path stringByAppendingSMBPathComponent:folderName];
 [provider copyFromPath:item.path toPath:tmp_path overwrite:YES auth:_defaultAuth progress:nil block:^(id result){
                         if ([result isKindOfClass:[SFSMBItemFile class]]) {
                             NSLog(@"file : %@", result);
-                            
+
                         } else {
                             NSLog(@"%@", result);
                         }
-                        
+
  }];
 
 ```
@@ -384,7 +384,7 @@ NSString *path = [_path stringByAppendingSMBPathComponent:folderName];
     }
     [_httpserver setConnectionClass:[HTTPConnection class]];
     [self startServer];
-    
+
 }
 
 - (void)startServer
@@ -437,13 +437,13 @@ NSString *path = [_path stringByAppendingSMBPathComponent:folderName];
     }
     NSLog(@"_smbFile.path : %@",arrayPath[1]);
     NSString *abpath = [NSString pathWithComponents:components];
-    
+
     NSString *string = [NSString stringWithFormat:@"http://%@:16918/%@",[self getIPAddress],abpath];
     NSLog(@"URL %@",string);
-    
+
     NSString *urlStr = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
+
     [self presentViewController:[[IJKVideoViewController alloc] initWithURL:[NSURL URLWithString:urlStr]] animated:YES completion:^{
         [_downloadButton setEnabled:YES];
     }];
@@ -472,7 +472,7 @@ ls /mnt/sda1/
 可在局域网环境下，使用一台Windows系统的PC，查看能否通过samba正常访问存储设备内容。
 假设路由器的网关为192.168.4.1，那么在资源管理器地址栏中输入：
 ```
-\\192.168.4.1\usb 
+\\192.168.4.1\usb
 ```
 
 ![wintest](/assets/images/iOS-SDK-Storage/ios-sdk-usb-win-test.png)
@@ -495,7 +495,7 @@ ls /mnt/sda1/
 
 * 检查路由器USB存储设备测试结果
 * 检查硬件USB模块是否正常工作
-* 检查路由器软件[usb驱动配置选项](https://siflower.github.io/2020/09/03/usb_driver/#4-usb%E9%A9%B1%E5%8A%A8%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9)
+* 检查路由器软件[usb驱动配置选项](https://bingchun.github.io/2020/09/03/usb_driver/#4-usb%E9%A9%B1%E5%8A%A8%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9)
 
 
 ## 2 局域网下路由器USB存储设备Samba访问失败

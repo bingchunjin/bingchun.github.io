@@ -22,7 +22,7 @@ mermaid: true
 
 ## 文档模板
 
-文档使用markdown语言，markdown语法参照[wiki-markdown](https://siflower.github.io/wiki/markdown/)。
+文档使用markdown语言，markdown语法参照[wiki-markdown](https://bingchun.github.io/wiki/markdown/)。
 
 文档中必须包含文档头
 
@@ -53,7 +53,7 @@ mermaid: true
 
 ## 本地预览
 
-首先下载[本项目源码仓库](https://github.com/Siflower/siflower.github.io)
+首先下载[本项目源码仓库](https://github.com/Siflower/bingchun.github.io)
 
 本地预览可以使用常规的markdown编辑工具进行即可，推荐使用vscode+markdown all in one 插件的方式进行本地markdown预览
 
@@ -121,10 +121,10 @@ erDiagram
 在markdown中插入链接
 
 ```
-[wiki-markdown](https://siflower.github.io/wiki/markdown/)
+[wiki-markdown](https://bingchun.github.io/wiki/markdown/)
 ```
 
-[wiki-markdown](https://siflower.github.io/wiki/markdown/)
+[wiki-markdown](https://bingchun.github.io/wiki/markdown/)
 
 在mermaid中插入链接
 ```mermaid
@@ -149,7 +149,7 @@ graph LR
 
 正文
 
-- tag 
+- tag
 
 正文
 

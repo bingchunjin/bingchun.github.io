@@ -23,7 +23,7 @@ mermaid: true
 
 - 开发与测试环境
 
-参考[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 - WAN-LAN介绍
 
@@ -35,12 +35,12 @@ mermaid: true
 
 ## 2 项目引用
 
-- 配置参数说明中vlan划分WAN-LAN部分可以参考[外围switch芯片对接和使用手册](https://siflower.github.io/2020/09/11/new_switch_import_guide/)
+- 配置参数说明中vlan划分WAN-LAN部分可以参考[外围switch芯片对接和使用手册](https://bingchun.github.io/2020/09/11/new_switch_import_guide/)
 
-- wifi的wds功能可以参考[WDS开发及使用手册](https://siflower.github.io/2020/09/02/WDS_development_and_user_manual/)
+- wifi的wds功能可以参考[WDS开发及使用手册](https://bingchun.github.io/2020/09/02/WDS_development_and_user_manual/)
 
-- network文件的参数参考[config文件配置手册](https://siflower.github.io/2020/09/11/config_setting/)
-  
+- network文件的参数参考[config文件配置手册](https://bingchun.github.io/2020/09/11/config_setting/)
+
 ## 3 开发详情
 
 -  文件配置
@@ -132,39 +132,39 @@ openwrt-18.06/package/network/config/netifd/files/etc/init.d/network
 
 ```
 root@OpenWrt:/# ifconfig
-br-lan    Link encap:Ethernet  HWaddr 10:16:88:B0:E0:0C  
+br-lan    Link encap:Ethernet  HWaddr 10:16:88:B0:E0:0C
           inet addr:192.168.4.1  Bcast:192.168.4.255  Mask:255.255.255.0
           inet6 addr: fe80::1216:88ff:feb0:e00c/64 Scope:Link
           inet6 addr: fd92:862:c79c::1/60 Scope:Global
           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
           RX packets:4076 errors:0 dropped:0 overruns:0 frame:0
           TX packets:3594 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000 
+          collisions:0 txqueuelen:1000
           RX bytes:360207 (351.7 KiB)  TX bytes:353362 (345.0 KiB)
 
-eth0      Link encap:Ethernet  HWaddr 10:16:88:B0:E0:0C  
+eth0      Link encap:Ethernet  HWaddr 10:16:88:B0:E0:0C
           inet6 addr: fe80::1216:88ff:feb0:e00c/64 Scope:Link
           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
           RX packets:4143 errors:0 dropped:0 overruns:0 frame:0
           TX packets:3970 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000 
+          collisions:0 txqueuelen:1000
           RX bytes:443696 (433.2 KiB)  TX bytes:483517 (472.1 KiB)
-          Interrupt:25 
+          Interrupt:25
 
-eth0.1    Link encap:Ethernet  HWaddr 10:16:88:B0:E0:0C  
+eth0.1    Link encap:Ethernet  HWaddr 10:16:88:B0:E0:0C
           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
           RX packets:4076 errors:0 dropped:0 overruns:0 frame:0
           TX packets:3594 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000 
+          collisions:0 txqueuelen:1000
           RX bytes:360263 (351.8 KiB)  TX bytes:353362 (345.0 KiB)
 
-eth0.2    Link encap:Ethernet  HWaddr 10:16:88:B0:E0:0D  
+eth0.2    Link encap:Ethernet  HWaddr 10:16:88:B0:E0:0D
           inet addr:192.168.14.152  Bcast:192.168.14.255  Mask:255.255.255.0
           inet6 addr: fe80::1216:88ff:feb0:e00d/64 Scope:Link
           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
           RX packets:60 errors:0 dropped:0 overruns:0 frame:0
           TX packets:355 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000 
+          collisions:0 txqueuelen:1000
           RX bytes:8181 (7.9 KiB)  TX bytes:111356 (108.7 KiB)
 
 ```
@@ -186,7 +186,7 @@ Siflower可以划分多个wan，以AC28为例，默认port3为wan，port 0、1�
 A： 将一个网口连接网线，其余网口不接网线，使用cat /sys/kernel/debug/npu_debug命令查看，link status为 1 的phy代表该网口对应的端口编号。如下示例，代表当前接着网线的网口为端口2。
 
 ```
-root@OpenWrt:/# cat /sys/kernel/debug/npu_debug 
+root@OpenWrt:/# cat /sys/kernel/debug/npu_debug
 check phy link status
 phy0    status 0
 phy1    status 0

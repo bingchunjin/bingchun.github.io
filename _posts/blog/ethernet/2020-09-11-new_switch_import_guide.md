@@ -22,7 +22,7 @@ mermaid: true
 
 - 开发与测试环境
 
-参考[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 - 简介
 
@@ -44,7 +44,7 @@ vlan全称为虚拟局域网，虚拟局域网是一组逻辑上的设备和用�
 
 ## 2 项目引用
 
-- network配置可以参考[以太网wan-lan划分指南](https://siflower.github.io/2020/09/05/ethernet_wan_lan_division/)
+- network配置可以参考[以太网wan-lan划分指南](https://bingchun.github.io/2020/09/05/ethernet_wan_lan_division/)
 
 ## 3 开发详情
 
@@ -52,7 +52,7 @@ vlan全称为虚拟局域网，虚拟局域网是一组逻辑上的设备和用�
 
 1、mdio读写
 
-通过gmac的mdio接口既可以读写通用phy中的寄存器，也可以读写switch中的寄存器。其中不同的switch芯片有不同的mdio读写方式，查看待对接switch的说明书可以新增该switch中寄存器的mdio读写方法。使用mdio读写时，需要确定phy addr。phy addr一般通过scan的方式在0~31的范围进行查找，也可以按实际硬件情况在dts中指定，具体查看[linux dts说明文档](https://siflower.github.io/2020/09/03/linux_dts_introduce/)。
+通过gmac的mdio接口既可以读写通用phy中的寄存器，也可以读写switch中的寄存器。其中不同的switch芯片有不同的mdio读写方式，查看待对接switch的说明书可以新增该switch中寄存器的mdio读写方法。使用mdio读写时，需要确定phy addr。phy addr一般通过scan的方式在0~31的范围进行查找，也可以按实际硬件情况在dts中指定，具体查看[linux dts说明文档](https://bingchun.github.io/2020/09/03/linux_dts_introduce/)。
 
 2、rgmii的clock检查是否正常
 
@@ -68,9 +68,9 @@ vlan全称为虚拟局域网，虚拟局域网是一组逻辑上的设备和用�
 
 **注意：** reset_gpio默认为0xb即gpio11,新的硬件版型需要对此gpio做确认。
 
-- 如果硬件上没有修改，则保持默认值  
+- 如果硬件上没有修改，则保持默认值
 - 如果硬件上次脚位有改动，请在uboot中修改
-  执行```make menuconfig```,修改下图对应的switch reset gpio值，保存后覆盖configs/下默认的版型配置文件即可  
+  执行```make menuconfig```,修改下图对应的switch reset gpio值，保存后覆盖configs/下默认的版型配置文件即可
   ![uboot_switch_gpio](/assets/images/switch_img/uboot_switch_gpio.png)
 
 
@@ -99,16 +99,16 @@ devmem 0x19e04448  32 0x40 //设置rx delay = 0x40 * 0.04ns
 ```
 
 - tx/rx delay在uboot中配置
-  当通过devmem命令调整好delay值后，在uboot中将该值写到configs/目录下对应的版型文件中  
-  如configs/sfa28_fullmask_ac28_defconfig  
+  当通过devmem命令调整好delay值后，在uboot中将该值写到configs/目录下对应的版型文件中
+  如configs/sfa28_fullmask_ac28_defconfig
   ![trx_delay](/assets/images/switch_img/trx_delay.png)
 
   也可以通过make menuconfig进行配置，然后保存到configs/目录下对应的版型文件
-  
+
   ![uboot_switch_gpio](/assets/images/switch_img/uboot_switch_gpio.png)
 
 - tx/rx delay在linux中配置
-  当通过devmem命令调整好delay值后，在linux中将该值写到对应的版型的dts文件  
+  当通过devmem命令调整好delay值后，在linux中将该值写到对应的版型的dts文件
   如```linux-4.14.90/arch/mips/boot/dts/siflower/sf19a28_fullmask_ac28.dts```，前一个代表TX delay，后一个代表RX delay
 
   ![dts_trx_delay](/assets/images/switch_img/dts_trx_delay.png)
@@ -125,7 +125,7 @@ devmem 0x19e04448  32 0x40 //设置rx delay = 0x40 * 0.04ns
 目前的irom代码可以支持通用phy，realtek和intel两种switch的型号（通过更换patch的内容进行支持），当没有patch数据时默认支持realtek switch。irom中对接switch主要包括switch的初始化以及检查端口连接状态，由于irom中的代码是不可修改的，所以对接新的switch主要通过修改patch文件完成，irom的gmac代码位于irom/gmac目录下。
 
 - patch简介
- 
+
 patch数据存放在txt文件中，编译uboot时放入对应位置，patch文件位于uboot目录的如下位置：
 
 ```
@@ -159,7 +159,7 @@ uboot/bare_spl/tools/checksum.c
 根据patch简介中的介绍，通过修改物理地址为0x6fe4开始的内容，也可以达到修改patch参数的目的。（例如使用flash烧录器烧录）
 
 - patch数据框架
-  
+
 irom烧录流程如下：
 
 ```mermaid
@@ -174,22 +174,22 @@ graph TD
 
 patch数据分为5个部分：
 
-||  | 功能| 
-| -----| ------- | ------ | 
-|1| 前两条patch数据 | 储存可变的配置参数（gmac的tx/rx delay、使用指定的phy addr或scan得到phy addr、检查link的时间等） | 
-|2| 检查连接 | 通过mdio的读写读取phy的连接状态 | 
-|3| switch初始化 | 通过mdio的读写完成switch的初始化 | 
-|4| 触发初始化 | 这条配置触发3中配置的switch初始化  | 
-|5| 触发检查连接 | 这条配置触发2中配置的检查连接 | 
+||  | 功能|
+| -----| ------- | ------ |
+|1| 前两条patch数据 | 储存可变的配置参数（gmac的tx/rx delay、使用指定的phy addr或scan得到phy addr、检查link的时间等） |
+|2| 检查连接 | 通过mdio的读写读取phy的连接状态 |
+|3| switch初始化 | 通过mdio的读写完成switch的初始化 |
+|4| 触发初始化 | 这条配置触发3中配置的switch初始化  |
+|5| 触发检查连接 | 这条配置触发2中配置的检查连接 |
 
 各部分说明及注意点如下：
 
-||  | 说明 | 
-| -----| ------- | ------ | 
-|1| 前两条patch数据 | 1、可以选择phy/switch模式，选择1000Mphy模式时，irom按照通用phy的方式进行初始化，无需后续部分的patch内容 2、可配置tx/rx delay，tx/rx delay范围为0x1~0x100 3、当选择switch模式时，irom代码需要各部分patch的起始offset，其中检查连接固定为第3条，所以这里需要存放switch初始化、 触发初始化、触发检查连接的offset，offset的计算见patch简介 | 
-|2| 检查连接 | 1、对应switch示例的第三条数据 2、可以选择mdio read或write，选择read时会从参数4的地址进行mdio read，选择write时会在参数4的地址写入参数3的数值 3、参数2为1表示该部分结束，检查连接部分由1条patch组成，配置多条的方法参见下面的switch初始化部分| | 
+||  | 说明 |
+| -----| ------- | ------ |
+|1| 前两条patch数据 | 1、可以选择phy/switch模式，选择1000Mphy模式时，irom按照通用phy的方式进行初始化，无需后续部分的patch内容 2、可配置tx/rx delay，tx/rx delay范围为0x1~0x100 3、当选择switch模式时，irom代码需要各部分patch的起始offset，其中检查连接固定为第3条，所以这里需要存放switch初始化、 触发初始化、触发检查连接的offset，offset的计算见patch简介 |
+|2| 检查连接 | 1、对应switch示例的第三条数据 2、可以选择mdio read或write，选择read时会从参数4的地址进行mdio read，选择write时会在参数4的地址写入参数3的数值 3、参数2为1表示该部分结束，检查连接部分由1条patch组成，配置多条的方法参见下面的switch初始化部分| |
 |3| switch初始化 |  1、对应switch示例的第四至第十三条参数，这些参数的含义与第三条相同。2、其中第四至第十二条的参数2为0表示该部分未结束，第十三条的参数2为1表示该部分结束。只配置单条数据的方法参见上面的检查连接部分|
-|4| 触发初始化 | 这条默认配置可以触发3中配置的switch初始化  | 
+|4| 触发初始化 | 这条默认配置可以触发3中配置的switch初始化  |
 |5| 触发检查连接 | 1、这部分会将检查连接部分中最后一次读取的数据右移（参数1的值  +2）bit后，bit0为1继续进行镜像烧录，bit0为0停止烧录。2、检查连接部分可以读switch中某个phy的连接状态决定是否继续烧录，或者使检查的bit值为1进行镜像烧录|
 
 通用phy参数示例与各参数说明如下：
@@ -199,10 +199,10 @@ patch数据分为5个部分：
 30 40 0 0 0 0 0
 ```
 
-| | 参数1 | 参数2| 参数3| 参数4| 参数5| 参数6| 参数7| 
+| | 参数1 | 参数2| 参数3| 参数4| 参数5| 参数6| 参数7|
 | -----| ------- | ------ | ------ | ------ | ------ | ----- | ---- |
 | 第一条参数 |2  | 1 | 1 | 5 | 0 | 0 |7d0|
-| 说明 | default | default  | 1-选择1000Mphy模式 3-选择switch模式 |default|default|default | 7d0-检查连接时间为2000ms| 
+| 说明 | default | default  | 1-选择1000Mphy模式 3-选择switch模式 |default|default|default | 7d0-检查连接时间为2000ms|
 | 第二条参数| 30 | 40 |0 | 0 | 0| 0|0|
 | 说明| tx delay-0x30*0.04ns | rx delay-0x40*0.04ns | 1-使用给定的phy addr 0-scan获取phy addr| phy addr的值为0| deflaut|deflaut |deflaut |
 
@@ -229,27 +229,27 @@ intel switch参数示例与各参数说明如下：
 
 参数说明：
 
-| | 参数1 | 参数2| 参数3| 参数4| 参数5| 参数6| 参数7| 
+| | 参数1 | 参数2| 参数3| 参数4| 参数5| 参数6| 参数7|
 | -----| ------- | ------ | ------ | ------ | ------ | ----- | ---- |
 | 第一条参数 |2  | 1 | 3 | 5 | 0 | 0 |7d0|
-| 说明 | default | default  | 1-选择1000Mphy模式 3-选择switch模式 |default|default|default | 7d0-检查连接时间为2000ms| 
+| 说明 | default | default  | 1-选择1000Mphy模式 3-选择switch模式 |default|default|default | 7d0-检查连接时间为2000ms|
 | 第二条参数| 60 | 10 |1 | 1f | 7038| 716c|7150|
 | 说明| tx delay-0x60*0.04ns | rx delay-0x10*0.04ns | 1-使用给定的phy addr 0-scan获取phy addr| 指定phy addr的值为31| switch初始化的offset| 触发初始化的offset| 触发检查连接的offset|
 | 第三条参数| 0 | 1 |1 | 16 | 1 | 0| 0 |
-| 说明| default | 0-该部分未结束 1-该部分结束 | mdio write写入的值| mdio write/read的地址|0-mdio_write 1-mdio_read | mdio read/write执行前的delay配置，单位ms|default | 
+| 说明| default | 0-该部分未结束 1-该部分结束 | mdio write写入的值| mdio write/read的地址|0-mdio_write 1-mdio_read | mdio read/write执行前的delay配置，单位ms|default |
 | 第四条参数| 0 | 0 |1c0 | 1f | 0 | 0| 0 |
-| 说明| default | 0-该部分未结束 1-该部分结束 | mdio write写入的值| mdio write/read的地址|0-mdio_write 1-mdio_read | mdio read/write执行前的delay配置，单位ms|default | 
+| 说明| default | 0-该部分未结束 1-该部分结束 | mdio write写入的值| mdio write/read的地址|0-mdio_write 1-mdio_read | mdio read/write执行前的delay配置，单位ms|default |
 | ... | ... | ... | ...| ... | ... | ...| ... |
 | 第十三条参数| 0 | 1 | 0 | 10 | 1 | 0| 0 |
-| 说明| default | 0-该部分未结束 1-该部分结束 | mdio write写入的值| mdio write/read的地址|0-mdio_write 1-mdio_read | mdio read/write执行前的delay配置，单位ms|default | 
+| 说明| default | 0-该部分未结束 1-该部分结束 | mdio write写入的值| mdio write/read的地址|0-mdio_write 1-mdio_read | mdio read/write执行前的delay配置，单位ms|default |
 | 第十四条参数| 0 | 1 | 0 | 10 | 5 | 0| 0 |
 | 说明| default | default| default|default |default | default|default | 触发switch初始化部分|
 | 第十五条参数| 4 | 1 | 0 | 10 | 7 | 0| 0 |
-| 说明| 读取bit的偏移量 | default | default|default|default | default|default | 
+| 说明| 读取bit的偏移量 | default | default|default|default | default|default |
 
 - 代码结构参见redmine#[5197](http://redmine.siflower.cn/redmine/issues/5197)
 
-- irom烧录参考[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+- irom烧录参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 irom烧录截图
 
@@ -265,7 +265,7 @@ pc烧录成功截图
 
 - 对接准备
 
-见3.1节的介绍，可以参考[U-boot移植应用开发手册](https://siflower.github.io/2020/09/08/ubootDevelopmentManual/)
+见3.1节的介绍，可以参考[U-boot移植应用开发手册](https://bingchun.github.io/2020/09/08/ubootDevelopmentManual/)
 
 - 对接流程
 
@@ -275,8 +275,8 @@ uboot中gmac和switch的代码存放在
 uboot/drivers/net/sfa18_gmac.c
 ```
 
-**1，switch对接：**  
-每个switch中有多个phy的接口，根据switch的说明书可以查看读写单个phy中通用phy寄存器的方法。  
+**1，switch对接：**
+每个switch中有多个phy的接口，根据switch的说明书可以查看读写单个phy中通用phy寄存器的方法。
 对接新的switch或phy，只需要在函数sf_gmac_register中增加对phy id的判断（用来区分不同的switch或phy），并且增加初始化函数（一般为设置cpu port为1000M全双工，按switch要求进行初始化）、设置tx/rx delay即可。
 对应代码如下（以intel switch为例）：
 
@@ -303,22 +303,22 @@ if(!chip_id) {
 gsw_reg_rd(priv, 0xFA11, 0, 16, (unsigned int*)&chip_id)
 ```
 
-该函数用于读取寄存器的值，0xFA11为chip_id使用寄存器，一般在芯片手册说明。这里读取寄存器的值之后赋值给chip_id，目的是从下方的多个if函数中判断不同switch。第一次调试需要手动打印出变量chip_id取得值，然后后续才在if判断中写入。  
+该函数用于读取寄存器的值，0xFA11为chip_id使用寄存器，一般在芯片手册说明。这里读取寄存器的值之后赋值给chip_id，目的是从下方的多个if函数中判断不同switch。第一次调试需要手动打印出变量chip_id取得值，然后后续才在if判断中写入。
 和gsw_reg_wr函数一样，里面会调用相同函数
 
 ```
 sgmac_mdio_write(priv->bus, intel_phy_addr, 0, SMDIO_WRADDR, ro);
 ```
 
-其中的intel_phy_addr是switch的phy_addr，通过源码可以查看，需要自行确认调整。  
-intel_rgmii_init(priv, 5);  
-用于对rgmii的初始化，5为rgmii_port0，可从源码查找。  
+其中的intel_phy_addr是switch的phy_addr，通过源码可以查看，需要自行确认调整。
+intel_rgmii_init(priv, 5);
+用于对rgmii的初始化，5为rgmii_port0，可从源码查找。
 
 ![phy_addr](/assets/images/switch_img/phy_addr.png)
 
-总体来说，uboot里面只需要提供一个读写寄存器的接口函数 和初始化rgmii接口的函数。  
-读写正常， rgmii初始化正常之后，调节tx/rx delay。参考对接准备中的第7点。  
-先调节tx delay，从0x00调到0xff，httpd给板子设定ip后，在板子上ping设定同网段静态ip的PC，在PC上抓包，直到抓到板子发出的报文，说明tx通了。  
+总体来说，uboot里面只需要提供一个读写寄存器的接口函数 和初始化rgmii接口的函数。
+读写正常， rgmii初始化正常之后，调节tx/rx delay。参考对接准备中的第7点。
+先调节tx delay，从0x00调到0xff，httpd给板子设定ip后，在板子上ping设定同网段静态ip的PC，在PC上抓包，直到抓到板子发出的报文，说明tx通了。
 
 **注意：若仍旧失败，可以使用switch的tx/rx delay调节方法，通过寄存器的读写函数如gsw_reg_wr，查找芯片手册对应的tx/rx对应寄存器以及对应比特位，将值设置为0，重新开始找正确的delay值。**
 
@@ -388,7 +388,7 @@ sgmac_probe调用sfax8_get_gswitch_type检查phy id来确定型号（与uboot中
 
 ```
 sgmac_open:
-        if (priv->phydev->phy_id == xxx){ 
+        if (priv->phydev->phy_id == xxx){
         ……
         priv->pesw_priv->init(priv->eswitch_pdev);
         //cpu port初始化，一般配置1000M 全双工
@@ -407,7 +407,7 @@ sgmac_stop：
 在sf_gmac/src/sf_eswitch_ethtool.c中，以接口形式对应。
 
 ```
-struct ethtool_ops eswitch_ethtool_ops = { 
+struct ethtool_ops eswitch_ethtool_ops = {
     .get_settings       = gsw_get_settings,
     .set_settings       = gsw_set_settings,
     .get_drvinfo        = gsw_get_drvinfo,
@@ -417,10 +417,10 @@ struct ethtool_ops eswitch_ethtool_ops = {
     .get_link       = ethtool_op_get_link,
     .nway_reset     = gsw_nway_reset,
     .get_ringparam      = gsw_get_ringparam,
-};     
+};
 ```
 
-具体ethtool使用参考[有线网络和服务介绍](https://siflower.github.io/2020/09/08/ethernetGuide/)
+具体ethtool使用参考[有线网络和服务介绍](https://bingchun.github.io/2020/09/08/ethernetGuide/)
 
 3. phy的对接
 
@@ -433,7 +433,7 @@ if (priv->phy_node){
         priv->phydev = of_phy_connect(ndev, priv->phy_node, sgmac_adjust_link,
                 0, PHY_INTERFACE_MODE_RGMII);
     ……
-}  
+}
 sgmac_stop:
 struct sgmac_priv *priv = netdev_priv(ndev);
      if (priv->phy_node)
@@ -490,14 +490,14 @@ struct sf_eswitch_api_t {
     u32 (*get_cpu_port_rx_mib)(void);
     int (*set_cpu_port_self_mirror)(struct sf_eswitch_priv *pesw_priv, int port, int enable);
     int (*getAsicReg)(unsigned int reg, unsigned int *pValue);
-    int (*setAsicReg)(unsigned int reg, unsigned int pValue);                                                                          
+    int (*setAsicReg)(unsigned int reg, unsigned int pValue);
     int (*getAsicPHYReg)(unsigned int phyNo, unsigned int phyAddr, unsigned int *pRegData);
     int (*setAsicPHYReg)(unsigned int phyNo, unsigned int phyAddr, unsigned int pRegData);
 };
 ```
 
-在intel7084_src/src/sf_intel7084_ops.c中完成对应函数的编写，sf_eswitch_driver.c根据chip_id来确定型号，并且选择使用对应switch的函数和相应的参数，硬件参数一般由具体的硬件型号确定  
-sf_intel7084_ops.c中注册函数：  
+在intel7084_src/src/sf_intel7084_ops.c中完成对应函数的编写，sf_eswitch_driver.c根据chip_id来确定型号，并且选择使用对应switch的函数和相应的参数，硬件参数一般由具体的硬件型号确定
+sf_intel7084_ops.c中注册函数：
 
 ```
 struct sf_eswitch_api_t intel7084_api = {
@@ -513,7 +513,7 @@ struct sf_eswitch_api_t intel7084_api = {
 };
 ```
 
-/openwrt-18.06/package/kernel/sf_eswitch/src/sf_eswitch_driver.c中  
+/openwrt-18.06/package/kernel/sf_eswitch/src/sf_eswitch_driver.c中
 unsigned char sf_eswitch_init_swdev函数:
 
 ```
@@ -526,10 +526,10 @@ unsigned char sf_eswitch_init_swdev函数:
             pesw_priv->port_list = SWITCH_PORT_LIST;
 #ifdef CONFIG_SWCONFIG
             pswdev->ports = INTEL_SWITCH_PORT_NUM;
-            pswdev->cpu_port = RGMII_PORT0;                                                                                                                       
+            pswdev->cpu_port = RGMII_PORT0;
 #endif
             break;
-        }   
+        }
 ```
 
 除了.init .deinit.check_phy_linkup这3个函数，在intel7084_src/src/sf_intel7084_ops.c中结构体 switch_dev_ops中存放了配置switch vlan功能的函数，switch_dev_ops为内核提供的标准switch设备的结构体，其中的内容如下。
@@ -647,7 +647,7 @@ linux对接完成后，编译镜像并烧录，wan口连接上级设备后能自
 - switch的吞吐测试
 
 测试包括普通网线下的lan-lan,host-lan,wan-lan的测试，百米网线的测试，千兆网卡的百兆模式下的测试。
-具体的测试环境搭建和测试方法可以参考[以太网测试介绍](https://siflower.github.io/2020/09/08/ethernetTestGuide/)
+具体的测试环境搭建和测试方法可以参考[以太网测试介绍](https://bingchun.github.io/2020/09/08/ethernetTestGuide/)
 
 - qos测试用例
 
@@ -737,6 +737,6 @@ A： 当出现数据不通时，可以调整对应的tx/rx delay，使用devmem�
 
 - Q：软重启网口没有link，而断电重启不会出现此现象是什么问题？
 
-A：软重启会先down以太网接口，此时驱动会disable all phy，interface up后会重新enable all phy；如果发现uboot阶段，所有网口依旧没有link，说明uboot中没有进行switch 的hw reset（uboot阶段通过gpio触发），reset后网口会恢复默认配置；而断电重启不会有此流程，所以不会出现此现象;  
+A：软重启会先down以太网接口，此时驱动会disable all phy，interface up后会重新enable all phy；如果发现uboot阶段，所有网口依旧没有link，说明uboot中没有进行switch 的hw reset（uboot阶段通过gpio触发），reset后网口会恢复默认配置；而断电重启不会有此流程，所以不会出现此现象;
    需要确认uboot中CONFIG_SFA18_ESWITCH_RST_GPIO的配置， 这是一个用户可以修改的宏，表示的是switch hw reset对应的GPIO number，不同客户使用我们芯片时，硬件接的GPIO number可能是不一样的需要对照硬件改为对应的gpio_num,
    即硬件switch hw reset对应的gpio为11, 则CONFIG_SFA18_ESWITCH_RST_GPIO 需要配置为11

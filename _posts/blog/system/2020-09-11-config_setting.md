@@ -33,7 +33,7 @@ config文件为openwrt用于存储配置的文件，方便用户进行配置。�
 
 - [openwrt 网络设置官方文档](https://oldwiki.archive.openwrt.org/zh-cn/doc/uci/network)
 
-- [wifi架构和配置手册](https://siflower.github.io/2020/08/12/wifi_architecture_and_configuration_manual/)
+- [wifi架构和配置手册](https://bingchun.github.io/2020/08/12/wifi_architecture_and_configuration_manual/)
 
 ## 3 config配置文件详情
 
@@ -186,7 +186,7 @@ config interface 'wan6'
 config device 'wan_dev'
         option name 'eth0.2'
         option macaddr '10:16:88:c6:44:41'
-        
+
 config switch
         option name 'switch0'
         option reset '1'
@@ -252,7 +252,7 @@ network.@another_section[0].new_option2='option_value2'
 ```
 config interface 'new_setcion'
         option new_option 'option_value'
-                            
+
 config another_section
         option new_option2 'option_value2'
 ```
@@ -265,7 +265,7 @@ config another_section
 
 1、wifi-device配置选项：
 
-  | 选项 |值类型|默认值|描述 | 
+  | 选项 |值类型|默认值|描述 |
   | :---: |:---:|:---:| :---: |
   |wifi-device|string|radio0|驱动设备名称|
   |type|string|mac80211|驱动类型，目前固定为"mac80211"。|
@@ -298,8 +298,8 @@ config another_section
   |isolate|boolean|0|连接此wifi的各设备之间是否隔离，1表示隔离，0表示不隔离。|
   |group|int|-|bridge中的分组，各个不同的group之间在bridge中是不能互相访问的。默认2.4G为0，5G为1。|
   |netisolate|boolean|0|如果配置为1，则从该bssid下的设备无法访问同一bridge中其它bssid的设备。|
-  
-  更多详细信息可参考[wifi架构和配置手册](https://siflower.github.io/2020/08/12/wifi_architecture_and_configuration_manual/)。
+
+  更多详细信息可参考[wifi架构和配置手册](https://bingchun.github.io/2020/08/12/wifi_architecture_and_configuration_manual/)。
 
 ### 5.2 /etc/config/network
 
@@ -469,7 +469,7 @@ config another_section
 
 1、system
 
-| 选项 |值类型|默认值|描述 | 
+| 选项 |值类型|默认值|描述 |
 | :---: |:---:|:---:| :---: |
 |zonename|string|Asia/Shanghai|地区|
 |timezone|string|CST-8|时区|
@@ -553,5 +553,5 @@ config another_section
 ## 6 FAQ
 
 - **Q：已更改配置并使用uci commit，为什么配置未生效？**
-  
+
   A：uci commit只是保存config文件配置。要使配置生效，还需要将相关进程重启一遍。例如：修改network配置后需要执行/etc/init.d/network restart；修改wireless后需要执行wifi reload

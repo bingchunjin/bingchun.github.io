@@ -23,11 +23,11 @@ Siflower的芯片提供一些PAD脚，这些PAD脚可以配置为不同的功能
 
 ## 1.2. 开发环境
 - 可以正常编译通过的Siflower SDK环境
-  该环境的搭建请参考[快速入门](https://siflower.github.io/2020/08/05/quick_start)
+  该环境的搭建请参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start)
 
 # 2. SF19A2890 fullmask IOMUX Table
 
-下面的表格就是Siflower的SF19A2890 fullmask的IOMUX表格, 在该表格中会说明Siflowr的每一个可以配置的PAD的支持配置成那些模式. 
+下面的表格就是Siflower的SF19A2890 fullmask的IOMUX表格, 在该表格中会说明Siflowr的每一个可以配置的PAD的支持配置成那些模式.
 
 | Index | Pin Name        | Default Mode | GPIO\_MODE | FUNC\_MODE0                       | FUNC\_MODE1 | FUNC\_MODE2 | FUNC\_MODE3        |
 |-------|-----------------|--------------|------------|-----------------------------------|-------------|-------------|--------------------|
@@ -85,13 +85,13 @@ Siflower的芯片提供一些PAD脚，这些PAD脚可以配置为不同的功能
 # 3. 如何在shell命令行获取PAD脚的状态
 ## 3.1. kernel选择DEBUG_FS配置
 
-可以通过make kernel_menuconfig选择, 然后编译镜像. 如何编译烧录镜像参考[快速入门](https://siflower.github.io/2020/08/05/quick_start)
+可以通过make kernel_menuconfig选择, 然后编译镜像. 如何编译烧录镜像参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start)
 
 DEBUG_FS的位置如下:
 ```
 Kernel hacking  --->
-    Compile-time checks and compiler options  ---> 
-        [*]Debug Filesystem 
+    Compile-time checks and compiler options  --->
+        [*]Debug Filesystem
 ```
 也可以通过直接修改修改target/linux/siflower/sf19a28-fullmask/config-3.18_$(board)文件,添加如下内容
 `CONFIG_DEBUG_FS=y`
@@ -101,60 +101,60 @@ Kernel hacking  --->
 烧录选择了CONFIG_DEBUG_FS的镜像,在运行的时候就可以通过命令`cat /sys/kernel/debug/pinctrl/pinctrl/pins`,在结合IOMUX Table即可知道每一个PAD所处的模式, 该命令的显示结果如下所示:
 
 ```
-root@OpenWrt:/# cat /sys/kernel/debug/pinctrl/pinctrl/pins   
-registered pins: 51   
-pin 0 (gpio-0) function func0 in lo; irq 31 (none)  
-pin 1 (gpio-1) function func0 in lo; irq 32 (none)  
-pin 2 (gpio-2) function func0 in lo; irq 33 (none)  
-pin 3 (gpio-3) function func0 in lo; irq 34 (none)  
-pin 4 (gpio-4) function func0 in lo; irq 35 (none)  
-pin 5 (gpio-5) function func0 in lo; irq 36 (none)  
-pin 6 (gpio-6) function func0 in lo; irq 37 (none)  
-pin 7 (gpio-7) function func0 in lo; irq 38 (none)  
-pin 8 (gpio-8) function gpio_in in hi; irq 39 (none)  
-pin 9 (gpio-9) function func0 in lo; irq 40 (none)  
-pin 10 (gpio-10) function func0 in lo; irq 41 (none)  
-pin 11 (gpio-11) function gpio_out in hi; irq 42 (edge-both)  
-pin 12 (gpio-12) function func0 in lo; irq 43 (none)  
-pin 13 (gpio-13) function func0 in lo; irq 44 (none)  
-pin 14 (gpio-14) function func0 in lo; irq 45 (none)  
-pin 15 (gpio-15) function func0 in lo; irq 46 (none)  
-pin 16 (gpio-16) function func0 in lo; irq 47 (none)  
-pin 17 (gpio-17) function func0 in lo; irq 48 (none)  
-pin 18 (gpio-18) function func0 in lo; irq 49 (none)  
-pin 19 (gpio-19) function func0 in lo; irq 50 (none)  
-pin 20 (gpio-20) function func0 in lo; irq 51 (none)  
-pin 21 (gpio-21) function func0 in lo; irq 52 (none)  
-pin 22 (gpio-22) function func0 in lo; irq 53 (none)  
-pin 23 (gpio-23) function func0 in lo; irq 54 (none)  
-pin 24 (gpio-24) function func0 in lo; irq 55 (none)  
-pin 25 (gpio-25) function func0 in lo; irq 56 (none)  
-pin 26 (gpio-26) function func0 in lo; irq 57 (none)  
-pin 27 (gpio-27) function func0 in lo; irq 58 (none)  
-pin 28 (gpio-28) function func0 in lo; irq 59 (none)  
-pin 29 (gpio-29) function func0 in lo; irq 60 (none)  
-pin 30 (gpio-30) function func0 in lo; irq 61 (none)  
-pin 31 (gpio-31) function func0 in lo; irq 62 (none)  
-pin 32 (gpio-32) function func0 in lo; irq 63 (none)  
-pin 33 (gpio-33) function func0 in lo; irq 64 (none)  
-pin 34 (gpio-34) function func0 in lo; irq 65 (none)  
-pin 35 (gpio-35) function func0 in lo; irq 66 (none)  
-pin 36 (gpio-36) function func0 in lo; irq 67 (none)  
-pin 37 (gpio-37) function func0 in lo; irq 68 (none)  
-pin 38 (gpio-38) function func0 in lo; irq 69 (none)  
-pin 39 (gpio-39) function func0 in lo; irq 70 (none)  
-pin 40 (gpio-40) function func0 in lo; irq 71 (none)  
-pin 41 (gpio-41) function func0 in lo; irq 72 (none)  
-pin 42 (gpio-42) function func0 in lo; irq 73 (none)  
-pin 43 (gpio-43) function func0 in lo; irq 74 (none)  
-pin 44 (gpio-44) function func0 in lo; irq 75 (none)  
-pin 45 (gpio-45) function func0 in lo; irq 76 (none)  
-pin 46 (gpio-46) function func0 in lo; irq 77 (none)  
-pin 47 (gpio-47) function func0 in lo; irq 78 (none)  
-pin 48 (gpio-48) function gpio_out in lo; irq 79 (none)  
-pin 49 (gpio-49) function func0 in lo; irq 80 (none)  
-pin 50 (gpio-50) function func0 in lo; irq 81 (none)  
-root@OpenWrt:/#   
+root@OpenWrt:/# cat /sys/kernel/debug/pinctrl/pinctrl/pins
+registered pins: 51
+pin 0 (gpio-0) function func0 in lo; irq 31 (none)
+pin 1 (gpio-1) function func0 in lo; irq 32 (none)
+pin 2 (gpio-2) function func0 in lo; irq 33 (none)
+pin 3 (gpio-3) function func0 in lo; irq 34 (none)
+pin 4 (gpio-4) function func0 in lo; irq 35 (none)
+pin 5 (gpio-5) function func0 in lo; irq 36 (none)
+pin 6 (gpio-6) function func0 in lo; irq 37 (none)
+pin 7 (gpio-7) function func0 in lo; irq 38 (none)
+pin 8 (gpio-8) function gpio_in in hi; irq 39 (none)
+pin 9 (gpio-9) function func0 in lo; irq 40 (none)
+pin 10 (gpio-10) function func0 in lo; irq 41 (none)
+pin 11 (gpio-11) function gpio_out in hi; irq 42 (edge-both)
+pin 12 (gpio-12) function func0 in lo; irq 43 (none)
+pin 13 (gpio-13) function func0 in lo; irq 44 (none)
+pin 14 (gpio-14) function func0 in lo; irq 45 (none)
+pin 15 (gpio-15) function func0 in lo; irq 46 (none)
+pin 16 (gpio-16) function func0 in lo; irq 47 (none)
+pin 17 (gpio-17) function func0 in lo; irq 48 (none)
+pin 18 (gpio-18) function func0 in lo; irq 49 (none)
+pin 19 (gpio-19) function func0 in lo; irq 50 (none)
+pin 20 (gpio-20) function func0 in lo; irq 51 (none)
+pin 21 (gpio-21) function func0 in lo; irq 52 (none)
+pin 22 (gpio-22) function func0 in lo; irq 53 (none)
+pin 23 (gpio-23) function func0 in lo; irq 54 (none)
+pin 24 (gpio-24) function func0 in lo; irq 55 (none)
+pin 25 (gpio-25) function func0 in lo; irq 56 (none)
+pin 26 (gpio-26) function func0 in lo; irq 57 (none)
+pin 27 (gpio-27) function func0 in lo; irq 58 (none)
+pin 28 (gpio-28) function func0 in lo; irq 59 (none)
+pin 29 (gpio-29) function func0 in lo; irq 60 (none)
+pin 30 (gpio-30) function func0 in lo; irq 61 (none)
+pin 31 (gpio-31) function func0 in lo; irq 62 (none)
+pin 32 (gpio-32) function func0 in lo; irq 63 (none)
+pin 33 (gpio-33) function func0 in lo; irq 64 (none)
+pin 34 (gpio-34) function func0 in lo; irq 65 (none)
+pin 35 (gpio-35) function func0 in lo; irq 66 (none)
+pin 36 (gpio-36) function func0 in lo; irq 67 (none)
+pin 37 (gpio-37) function func0 in lo; irq 68 (none)
+pin 38 (gpio-38) function func0 in lo; irq 69 (none)
+pin 39 (gpio-39) function func0 in lo; irq 70 (none)
+pin 40 (gpio-40) function func0 in lo; irq 71 (none)
+pin 41 (gpio-41) function func0 in lo; irq 72 (none)
+pin 42 (gpio-42) function func0 in lo; irq 73 (none)
+pin 43 (gpio-43) function func0 in lo; irq 74 (none)
+pin 44 (gpio-44) function func0 in lo; irq 75 (none)
+pin 45 (gpio-45) function func0 in lo; irq 76 (none)
+pin 46 (gpio-46) function func0 in lo; irq 77 (none)
+pin 47 (gpio-47) function func0 in lo; irq 78 (none)
+pin 48 (gpio-48) function gpio_out in lo; irq 79 (none)
+pin 49 (gpio-49) function func0 in lo; irq 80 (none)
+pin 50 (gpio-50) function func0 in lo; irq 81 (none)
+root@OpenWrt:/#
 ```
 
 其中`pin 0 (gpio-0)`代表的就是index为0, 而且是gpio-0; `function func0` 代表的就是function的模式为func0; `in lo`代表的就是该pin的状态(是高电平还是低电平);`irq 42 (edge-both)`代表的是该pin注册的中断号是42, 且为edge-both触发方式(边沿触发).
@@ -189,4 +189,4 @@ in Pin脚的电平状态有如下
 | hi     | 高电平       |
 
 # FAQ
-本文主要是提供Siflower的IOMUX Table, 关于IOMUX的具体应用请参考[Pinctrl 和 GPIO 使用手册](https://siflower.github.io/2020/07/30/pinctrl_gpio)
+本文主要是提供Siflower的IOMUX Table, 关于IOMUX的具体应用请参考[Pinctrl 和 GPIO 使用手册](https://bingchun.github.io/2020/07/30/pinctrl_gpio)

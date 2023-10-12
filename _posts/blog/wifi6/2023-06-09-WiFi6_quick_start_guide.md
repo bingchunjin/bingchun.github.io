@@ -53,7 +53,7 @@ Openwrt目录，代码修改，系统镜像编译，在此目录下进行
   - 使用make指令编译生成镜像目录为：`bin/targets/siflower/`
 
 ### 2.3 烧录说明
-与WiFi5系统一致，具体操作可参考 [镜像更新](https://siflower.github.io/2020/08/05/quick_start/#216-%E6%9B%B4%E6%96%B0%E9%95%9C%E5%83%8F)
+与WiFi5系统一致，具体操作可参考 [镜像更新](https://bingchun.github.io/2020/08/05/quick_start/#216-%E6%9B%B4%E6%96%B0%E9%95%9C%E5%83%8F)
 
 
 ## 3 新版型引入

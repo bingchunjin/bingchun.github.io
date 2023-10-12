@@ -21,14 +21,14 @@ mermaid: true
 
 ## 1.2. 开发环境
 - 可以正常编译通过的Siflower SDK环境
-  该环境的搭建请参考[快速入门](https://siflower.github.io/2020/08/05/quick_start)
+  该环境的搭建请参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start)
 
 # 2. SPI介绍
 SPI是串行外设接口（Serial Peripheral Interface）的缩写。SPI，是一种高速，全双工，同步的通信总线，并且在芯片的管脚上只占用四根线，节约了芯片的管脚，同时为PCB的布局上节省空间提供方便，正是出于这种简单易用的特性，如今越来越多的芯片集成了这种通信协议
 
 SPI协议是一种同步串行通信协议，主要用于短距离通信。SPI设备在全双工模式下通信，并且是Master-slave 模式，一个master可以有一个或多个slave。Master组织帧格式，并且可通过slave select线控制所选slave。所用的4根线分别记为data in( DI ) / data out( DO ) / slave select ( SS )/ clock( CLK )。
 
-![figure1 SPI model](/assets/images/bsp/spi_1.png)  
+![figure1 SPI model](/assets/images/bsp/spi_1.png)
 图 1 SPI bus can operate with a single master device and with one or more slave devices
 
 
@@ -47,7 +47,7 @@ SPI总线定义了四个逻辑信号：
 
 数据开始传输之前，master必须先设置clock信号，然后用SS 线上的逻辑0来选中slave设备。在每个时钟周期内，数据传输都是全双工的。Master送1bit数据到MOSI线上，slave读到这个数据，与此同时slave也发送了1bit数据到MISO线上，master也读到了一个数据。通常情况下，这可以通过两个移位寄存器来实现。
 
-![figure2 hardware setup](/assets/images/bsp/spi_2.png)  
+![figure2 hardware setup](/assets/images/bsp/spi_2.png)
 图 2 A typical hardware setup using two shift registers to form an inter-chip circular buffer
 
 如图2所示，两个移位寄存器在逻辑上连成一个环，每个移位寄存器的高位与另一个的低位相连，这样每次数据的最高有效位（MSB）被发送出去，新接收到的数据放在最低有效位（LSB），当寄存器的数据发送完成后，master和slave就交换了各自寄存器中的数据。然后重复这一过程，就实现了主从之间的数据通信。
@@ -57,8 +57,8 @@ Clock polarity (CPOL)表示clock的idle state是0还是1, CPOL=0表示clock的id
 
 Clock phase (CPHA)表示在clock的第几个边沿采集数据（一个时钟周期可以看成是idle->active->idle, 所以有两个边沿），CPHA=0表示在clock的idle state->active state边沿，即第一个边沿采集数据，CPHA=1表示在第二个边沿采集数据。
 
-![figure3 timing diagram](/assets/images/bsp/spi_3.png)  
-图 3 A timing diagram showing clock polarity and phase.  The red vertical line 
+![figure3 timing diagram](/assets/images/bsp/spi_3.png)
+图 3 A timing diagram showing clock polarity and phase.  The red vertical line
 represents CPHA=0 and the blue vertical line represents CPHA=1
 
 CPOL和CPHA相互组合可组成4种不同的模式，mode可记为(CPOL,CPHA)，这样（0,0）、（0,1）、（1,0）、（1,1）分别表示mode 0~3。
@@ -73,7 +73,7 @@ CPOL和CPHA相互组合可组成4种不同的模式，mode可记为(CPOL,CPHA)�
 每帧数据传输之前SSI_CE拉高一个CLK周期，然后master和slave在CLK上升沿发送数据，下降沿采集数据。数据可MSB在前或LSB在前。传输完成后DT在接下来的idle期间保持送出的最后1bit数值
 
 ### 2.4.3. Microwire Format
- 两种格式format 1和2。  
+ 两种格式format 1和2。
  - Format 1： master和slave都在CLK下降沿发送数据，上升沿采集数据。
  - Format 2： master 在下降沿采集和发送数据，slave在上升沿采集和发送数据。
 
@@ -81,11 +81,11 @@ CPOL和CPHA相互组合可组成4种不同的模式，mode可记为(CPOL,CPHA)�
 ## 3.1. Overview
 SF19A2890有3个独立的同步串行接口（SSP）。SSP是一个用于同步串行通信，支持Motorola SPI, Microwire 和TI三种数据格式的master或slave接口。数据输入输出时会各自先进入一个缓冲区，每个缓冲区最多可存放64个16 bit的数据。数据通过SSPTXD输出SSP，通过SSPRXD输入SSP。Clock prescaler 模块可以对时钟频率进行调节。我们通常也直接称之为SPI。
 
-![figure4 SSP block diagram](/assets/images/bsp/spi_4.png)  
+![figure4 SSP block diagram](/assets/images/bsp/spi_4.png)
 图 4：SSP block diagram
 
 ## 3.2. Data Transmit and Receive
-在数据开始传输或接收之前，需要对SSP进行初始化配置，设定master/slave、data size、CPOL&PHA、frame format和clock rate，SSP CR1的第0位还会设置是否为LOOP back mode。为了确保数据的正确性，还要先把TX_FIFO和RX_FIFO清空。 
+在数据开始传输或接收之前，需要对SSP进行初始化配置，设定master/slave、data size、CPOL&PHA、frame format和clock rate，SSP CR1的第0位还会设置是否为LOOP back mode。为了确保数据的正确性，还要先把TX_FIFO和RX_FIFO清空。
 
 从CPU/DMA发过来的数据通过APB接口，缓存到Tx FIFO中，然后由Transmit logic发送出去；从外部发过来的数据通过receive logic缓存到Rx FIFO中，然后由CPU/DMA通过APB接口读出。CPU往SSP发送或读取数据可通过对SSPDR进行写/读操作来进行。
 
@@ -93,7 +93,7 @@ SSP_enable是打开SSP接口，SSP开始把Tx FIFO中的数据往外发，同时
 
 # 4. SPI 驱动工作流程
 
-spi驱动模块对外的主要接口是spi_sync()函数，还有一个函数spi_write_then_read()在flash驱动中使用的比较多，也可以用来了解spi_sync()的主要使用方法。  
+spi驱动模块对外的主要接口是spi_sync()函数，还有一个函数spi_write_then_read()在flash驱动中使用的比较多，也可以用来了解spi_sync()的主要使用方法。
 该函数的主要工作流程如下图所示：
 
 ![figure5 SPI driver working flow](/assets/images/bsp/spi_5.png)

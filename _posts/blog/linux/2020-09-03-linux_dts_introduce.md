@@ -6,7 +6,7 @@ description: Linux DTS说明文档
 keywords: 文档开发
 mermaid: true
 ---
-# Linux DTS说明文档   
+# Linux DTS说明文档
 
 **目录**
 * TOC
@@ -20,7 +20,7 @@ mermaid: true
 
 ## 1.2. 开发环境
 - 可以正常编译通过的Siflower SDK环境
-  该环境的搭建请参考[快速入门](https://siflower.github.io/2020/08/05/quick_start)
+  该环境的搭建请参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start)
 
 # 2. 设备树
 ## 2.1. 设备树用法
@@ -304,8 +304,8 @@ pinctrl {
 ```
     palmbus@10000000 {
         compatible = "palmbus";
-        #address-cells = <1>; 
-        #size-cells = <1>; 
+        #address-cells = <1>;
+        #size-cells = <1>;
 
         ethernet: ethernet@0000000 {
             compatible = "siflower,sfax8-eth";
@@ -355,12 +355,12 @@ pinctrl {
         ranges = <0 0  0x10100000   0x10000     // Chipselect 1, Ethernet
                   1 0  0x10160000   0x10000     // Chipselect 2, i2c controller
                   2 0  0x30000000   0x1000000>; // Chipselect 3, NOR Flash
- 
+
         ethernet@0,0 {
             compatible = "smc,smc91c111";
             reg = <0 0 0x1000>;
         };
- 
+
         i2c@1,0 {
             compatible = "acme,a1234-i2c-bus";
             #address-cells = <1>;
@@ -371,7 +371,7 @@ pinctrl {
                 reg = <58>;
             };
         };
- 
+
         flash@2,0 {
             compatible = "samsung,k8f1315ebm", "cfi-flash";
             reg = <2 0 0x4000000>;

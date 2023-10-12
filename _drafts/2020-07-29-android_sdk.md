@@ -41,7 +41,7 @@ SiFlower、矽昌和矽昌其它商标均为上海矽昌微电子有限公司的
 
   * 熟悉相关硬件产品的功能和使用
 
-  * 使用SiWiFi Openwrt SDK完成产品固件的调试,可参照[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+  * 使用SiWiFi Openwrt SDK完成产品固件的调试,可参照[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
   * 了解Android开发、上线等一系列流程
 
@@ -60,13 +60,13 @@ SiFlower、矽昌和矽昌其它商标均为上海矽昌微电子有限公司的
 # 功能概述
 
     在Android设备上，通过Http协议调用路由器接口，实现对路由器的控制。如：WiFi设置、设备管理、网络管理等
-    
+
 # Demo程序
 
 [Android SDK demo 程序](https://github.com/siflower-company/SiRouterSDK-Demo-Android)
 
 ## demo 架构介绍
-  
+
 [build.gradle](https://github.com/siflower-company/SiRouterSDK-Demo-Android/blob/master/app/build.gradle)
 将本sdk引入到项目
 
@@ -75,7 +75,7 @@ SiFlower、矽昌和矽昌其它商标均为上海矽昌微电子有限公司的
 * onCreate()方法完成sdk初始化
 * connect()方法完成用户登录，websocket连接建立
 * 其余方法则包涵了所有提供接口的调用示例
-  
+
 demo包含功能：
 * 获取WiFi信息，设置WiFi
 * 获取设备列表，拉黑设备
@@ -155,7 +155,7 @@ implementation(name:'locallibrary-release', ext:'aar')
 
  //后台 app secret
  private String appSecret = "d67d8ab4f4c10bf22aa353e27879133c";
- 
+
  private void initSiRouterSDK(){
      SiWiFiManager.init(this, appKey,appSecret);
  }
@@ -465,7 +465,7 @@ private void bindRouter(Context context,SFUser sfUser){
 
 ### (3) 路由器与siflower服务连接测试
 
-[参照路由器siflower服务文档](#todo)  
+[参照路由器siflower服务文档](#todo)
 
 如连接失败，则需要确认路由器是否能正常访问internet。
 
@@ -539,7 +539,7 @@ private void bindRouter(Context context,SFUser sfUser){
 
 ### (2) 路由器接口测试
 
-参照[SiWiFi接口测试手册](https://siflower.github.io/2020/09/11/SiWiFi_interface_test/#42-app%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95)
+参照[SiWiFi接口测试手册](https://bingchun.github.io/2020/09/11/SiWiFi_interface_test/#42-app%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95)
 
 ## 3 远程接口测试
 
@@ -554,7 +554,7 @@ private void bindRouter(Context context,SFUser sfUser){
         SiWiFiManager.getInstance().setWiFi(routers, sfUser, params, new SingleObserver<SetWiFiDetailRet>() {
             @Override
             public void onSubscribe(Disposable d) {
-                
+
             }
 
             @Override
@@ -611,7 +611,7 @@ SiWiFiManager.getInstance().getWifiObserve(routers, sfUser, new SingleObserver<L
 
 * 检查[手机网络是否能连接上Siflower服务器](#1-手机与siflower服务连接测试)
 * 检查app key 和 app secret是否正确
-  
+
 
 ## 2 路由器绑定失败
 

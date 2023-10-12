@@ -22,7 +22,7 @@ mermaid: true
 
 ## 开发环境
 
-Siflower代码编译环境，详细见：[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+Siflower代码编译环境，详细见：[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 开发板调试环境
 
@@ -65,25 +65,25 @@ Siflower 目前Flash系统分区如下：
       <td colspan="3" align="center">pcba-test (512K)</td>
    </tr>
 </table>
- 
 
-#### spl  
 
-spl分区是uboot的bootloader，主要用于ddr初始化。spl分区从flash的0地址开始，镜像约22KB，分区最小支持32KB。spl镜像为u-boot-spl.img 。  
+#### spl
+
+spl分区是uboot的bootloader，主要用于ddr初始化。spl分区从flash的0地址开始，镜像约22KB，分区最小支持32KB。spl镜像为u-boot-spl.img 。
 **注意：**
-一般spl分区大小为128k，但是实际spl镜像约为22k，后面未使用部分位于0x7000位置存储了一个irom patch，用于irom下载时从此位置读取数据，详细irom patch使用方法参考：[gmac外围芯片对接手册](https://siflower.github.io/2020/09/11/new_switch_import_guide/)。
+一般spl分区大小为128k，但是实际spl镜像约为22k，后面未使用部分位于0x7000位置存储了一个irom patch，用于irom下载时从此位置读取数据，详细irom patch使用方法参考：[gmac外围芯片对接手册](https://bingchun.github.io/2020/09/11/new_switch_import_guide/)。
 
-#### uboot  
+#### uboot
 
-uboot是用于引导和启动内核程序的bootloader。uboot镜像为uboot.img，uboot一般与spl一般不会单独修改，共同合并为uboot_full.img使用。  
+uboot是用于引导和启动内核程序的bootloader。uboot镜像为uboot.img，uboot一般与spl一般不会单独修改，共同合并为uboot_full.img使用。
 
-#### uboot-env  
+#### uboot-env
 
-uboot-env是用于保存uboot使用的环境变量的分区，可以在uboot控制台中通过printenv命令查看其内容。如果uboot的配置固定不需修改，可以去掉该分区。详细的uboot-env内容请参照：[U-boot开发手册](https://siflower.github.io/2020/09/08/ubootDevelopmentManual/)。  
+uboot-env是用于保存uboot使用的环境变量的分区，可以在uboot控制台中通过printenv命令查看其内容。如果uboot的配置固定不需修改，可以去掉该分区。详细的uboot-env内容请参照：[U-boot开发手册](https://bingchun.github.io/2020/09/08/ubootDevelopmentManual/)。
 
-#### factory  
+#### factory
 
-前面2KB 作为系统信息：  
+前面2KB 作为系统信息：
 
 | index | counts(Bytes) | content | P10h example |Usage |
 | --- | --- | --- | --- | --- |
@@ -104,11 +104,11 @@ uboot-env是用于保存uboot使用的环境变量的分区，可以在uboot控�
 |153-154| 2|登录信息确认码（'l''i'表示下面的登录信息是有效的）| 'li'|登录信息有效时才填写|
 |155-158| 4|登录信息  |0xffffffff |   控制telnet server，ssh server，uart等（目前仅实现telnet）|
 
-后面2KB 作为wifi的校准信息。 
+后面2KB 作为wifi的校准信息。
 wifi校准信息是pcba测试软件实现填写，由wifi驱动负责解析。
 >硬件特性：目前仅bit 0和bit 1有效。
 - bit 0：
-- 1-> hw could provide 32K low power clock by PMU  or by external CLK 
+- 1-> hw could provide 32K low power clock by PMU  or by external CLK
 - 0-> can not provide
 - bit 1：
 - 1->hw connect GPIO to 32K low power pin
@@ -165,16 +165,16 @@ product_key=c51ce410c124a10e0db5e4b97fc2af39
    ![uuid_2](/assets/images/flash_partition_guide/uuid_2.png)
 
 - 在系统下读取此节点
-  
+
   在进入系统后可以读取此节点的信息，需要修改sfax8_factoty_read驱动
 
-  在linux-4.14.90-dev/linux-4.14.90/drivers/sfax8_factory_read下  
+  在linux-4.14.90-dev/linux-4.14.90/drivers/sfax8_factory_read下
   参考sf_factory_read_entry.c/sf_factory_read_sysfs.c中其它信息的写入，按照相同格式增加uuid
 
   增加成功后进入系统使用以下指令可以查看写入的值是否正确
 
   ```
-   cat /sys/devices/platform/factory-read/uuid  
+   cat /sys/devices/platform/factory-read/uuid
   ```
 
 
@@ -184,7 +184,7 @@ firmware包括整个openwrt系统和用户数据，对应镜像为openwrt-*.bin�
 
 #### pcba-test
 
-pcba-test为flash最后的512KB。正常系统启动时不存在这个分区，仅供pcba测试使用。在pcba测试结束后，该分区会作为系统的rootfs-data使用。详细pcba介绍可参考：[PCBA介绍](待添加)  
+pcba-test为flash最后的512KB。正常系统启动时不存在这个分区，仅供pcba测试使用。在pcba测试结束后，该分区会作为系统的rootfs-data使用。详细pcba介绍可参考：[PCBA介绍](待添加)
 
 ### 修改分区
 
@@ -218,49 +218,49 @@ pcba-test为flash最后的512KB。正常系统启动时不存在这个分区，�
 
 ##### 修改openwrt分区大小
 
-openwrt分区信息存储在dts中，dts路径为linux-4.14.90-dev/linux-4.14.90/arch/mips/boot/dts/siflower/sf19a28_fullmask_ac28.dts，分区信息如下：  
+openwrt分区信息存储在dts中，dts路径为linux-4.14.90-dev/linux-4.14.90/arch/mips/boot/dts/siflower/sf19a28_fullmask_ac28.dts，分区信息如下：
 
-```  
+```
 51     w25q128@0 {
 52         compatible = "w25q128";
 53         reg = <0>;  /* chip select */
 54         spi-max-frequency = <33000000>;
-55 
+55
 56         bank-width = <2>;
 57         device-width = <2>;
 58         #address-cells = <1>;
 59         #size-cells = <1>;
-60 
+60
 61         partition@0 {
 62             label = "spl-loader";
 63             reg = <0x0 0x20000>; /* 128k */
 64             read-only;
 65         };
-66 
+66
 67         partition@20000 {
 68             label = "u-boot";
 69             reg = <0x20000 0x60000>; /* 384k */
 70         };
-71 
+71
 72         partition@80000 {
 73             label = "u-boot-env";
 74             reg = <0x80000 0x10000>; /* 64k */
 75         };
-76 
+76
 77         factory:partition@90000 {
 78             label = "factory";
 79             reg = <0x90000 0x10000>; /* 64k */
 80         };
-81 
+81
 82         partition@a0000 {
 83             label = "firmware";
 84             reg = <0xa0000 0xf60000>; /* 640k-16M */
 85         };
 86     };
 87 };
-```  
+```
 
-其中partition@后面的地址为该分区在flash中的起始地址；label为分区名；regs的第一个值为起始地址，第二个值为分区大小。  
+其中partition@后面的地址为该分区在flash中的起始地址；label为分区名；regs的第一个值为起始地址，第二个值为分区大小。
 比如示例中flash总共为16MB，若是想将替换为8MB的flash，则需要将fireware分区的size减少为8\*1024\*1024-0xa0000=0x760000。
 
 
@@ -270,25 +270,25 @@ openwrt分区信息存储在dts中，dts路径为linux-4.14.90-dev/linux-4.14.90
 
 ##### 系统起来之前
 
-通过烧录16M Flash完整镜像更新所有分区，详细见：[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+通过烧录16M Flash完整镜像更新所有分区，详细见：[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
 ##### 系统起来之后
 
-* mtd命令修改  
+* mtd命令修改
 
-串口下，通过```cat /proc/mtd ```命令可以获取分区信息，如下：  
+串口下，通过```cat /proc/mtd ```命令可以获取分区信息，如下：
 1. 通过mtd命令可以升级对应分区镜像
-  mtd升级对应分区镜像，命令如下：    
+  mtd升级对应分区镜像，命令如下：
 ![mtd-write.png](/assets/images/flash_partition_guide/mtd-write.png)
 
-2. 通过mtd命令擦除对应分区内容  
+2. 通过mtd命令擦除对应分区内容
 ```
 mtd erase /dev/mtd5
 ```
 
-* dd命令修改  
-  
-  通过dd命令修改对应分区对应位置的数据内容：  
+* dd命令修改
+
+  通过dd命令修改对应分区对应位置的数据内容：
 
   ```
   1. 使用dd命令将分区内容读取出来：
@@ -297,19 +297,19 @@ mtd erase /dev/mtd5
   hexdump /tmp/mtd5_file (可以搭配 -n -s 等参数选择打印数据长度和位置)
   3. 使用dd命令修改分区内容：
   dd if=/tmp/source_file of=/dev/mtd5 (可以搭配bs count skip等参数确定写入数据位置大小)
-  ```  
+  ```
   通过dd命令可以对应修改factory分区具体位置的内容，如修改镜像进入PCBA模式命令如下：
-  
+
   ```
   printf "PCBT"| dd of=/dev/mtdblock3 bs=1 count=4 seek=23
-  ```   
-  
-  Linux下详细的dd命令使用方法可以使用```man dd```获取。   
+  ```
+
+  Linux下详细的dd命令使用方法可以使用```man dd```获取。
 
 
-* debugfs节点修改   
-  
-  ```/sys/kernel/debug/sfax8_factory_read```目录下提供有部分debugfs节点，可以对应修改查看部分分区内容，如下：   
+* debugfs节点修改
+
+  ```/sys/kernel/debug/sfax8_factory_read```目录下提供有部分debugfs节点，可以对应修改查看部分分区内容，如下：
   ![factory-debugfs](/assets/images/flash_partition_guide/factory-debugfs.png)
 
 
@@ -337,16 +337,16 @@ graph TB
 
 ## 调试/新增对应的物料
 
-详细可以参考：[Flash和DDR物料调试指南](https://siflower.github.io/2020/09/03/ddr_flash/)
+详细可以参考：[Flash和DDR物料调试指南](https://bingchun.github.io/2020/09/03/ddr_flash/)
 
 
 ## 项目引用
 
 ### 参考文档
 
-[快速入门](https://siflower.github.io/2020/08/05/quick_start/)
+[快速入门](https://bingchun.github.io/2020/08/05/quick_start/)
 
-[Flash和DDR物料调试指南](https://siflower.github.io/2020/09/03/ddr_flash/)
+[Flash和DDR物料调试指南](https://bingchun.github.io/2020/09/03/ddr_flash/)
 
 
 ## FAQ

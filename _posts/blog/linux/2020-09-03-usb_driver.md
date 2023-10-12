@@ -21,7 +21,7 @@ mermaid: true
 
 ## 1.2. 开发环境
 - 可以正常编译通过的Siflower SDK环境
-  该环境的搭建请参考[快速入门](https://siflower.github.io/2020/08/05/quick_start)
+  该环境的搭建请参考[快速入门](https://bingchun.github.io/2020/08/05/quick_start)
 
 # 2. USB驱动
 
@@ -31,8 +31,8 @@ drivers/usb目录下有很多个子文件夹，具体每个文件夹的介绍可
 
 ## 2.2. USB系统架构
 
-下图是USB系统的拓扑图，4个部分构成：USB主机控制器，根集线器，集线器，设备。其中Root Hub是一个虚拟的hub，与USB主机控制器是绑定在一起的  
-![figure1 USB系统拓扑图](/assets/images/bsp/USB_1.png)  
+下图是USB系统的拓扑图，4个部分构成：USB主机控制器，根集线器，集线器，设备。其中Root Hub是一个虚拟的hub，与USB主机控制器是绑定在一起的
+![figure1 USB系统拓扑图](/assets/images/bsp/USB_1.png)
 图 1 USB系统拓扑图
 
 通常情况下主机控制器的物理端口由一个虚拟的root hub来管理。这个hub是有主机控制器(host controller)的设备驱动虚拟的，用来统一管理总线拓扑，因此USB子系统的驱动能够用同样的方法管理每个端口。
@@ -96,11 +96,11 @@ USB子系统在运行之前会先进行初始化。USB初始化函数定义在`d
     		return 0;
     	}
     	usb_init_pool_max();
-    
+
     	retval = usb_debugfs_init();
     	if (retval)
     		goto out;
-    
+
     	usb_acpi_register();
     	retval = bus_register(&usb_bus_type);
     	if (retval)
@@ -123,7 +123,7 @@ USB子系统在运行之前会先进行初始化。USB初始化函数定义在`d
     	retval = usb_register_device_driver(&usb_generic_driver, THIS_MODULE);
     	if (!retval)
     		goto out;
-    
+
     	usb_hub_cleanup();
     hub_init_failed:
     	usb_devio_cleanup();
@@ -151,17 +151,17 @@ DebugFS，顾名思义，是一种用于内核调试的虚拟文件系统，内�
 ### 2.4.2. bus_register
 　　　是将usb总线注册到系统中，总线可是linux设备模型中的领导者，不管是多大的领导，也是领导，如PCI、USB、I2C，即使他们在物理上有从属关系，但是在模型的世界里，都是总线，拥有一样的待遇，所以任何一个子系统只要管理自己的设备和驱动，就需要向内核注册一个总线，注册报到。
 ### 2.4.3. bus_register_notifier
-大多数内核子系统都是相互独立的，因此某个子系统可能对其它子系统产生的事件感兴趣。为了满足这个需求，也即是让某个子系统在发生某个事件时通知其它的子系统，Linux内核提供了通知链的机制。通知链表只能够在内核的子系统之间使用，而不能够在内核与用户空间之间进行事件的通知。  
+大多数内核子系统都是相互独立的，因此某个子系统可能对其它子系统产生的事件感兴趣。为了满足这个需求，也即是让某个子系统在发生某个事件时通知其它的子系统，Linux内核提供了通知链的机制。通知链表只能够在内核的子系统之间使用，而不能够在内核与用户空间之间进行事件的通知。
 
-通知链表是一个函数链表，链表上的每一个节点都注册了一个函数。当某个事情发生时，链表上所有节点对应的函数就会被执行。所以对于通知链表来说有一个通知方与一个接收方。在通知这个事件时所运行的函数由被通知方决定，实际上也即是被通知方注册了某个函数，在发生某个事件时这些函数就得到执行。其实和系统调用signal的思想差不多。 
+通知链表是一个函数链表，链表上的每一个节点都注册了一个函数。当某个事情发生时，链表上所有节点对应的函数就会被执行。所以对于通知链表来说有一个通知方与一个接收方。在通知这个事件时所运行的函数由被通知方决定，实际上也即是被通知方注册了某个函数，在发生某个事件时这些函数就得到执行。其实和系统调用signal的思想差不多。
 
 `bus_register->BLOCKING_INIT_NOTIFIER_HEAD(&priv->bus_notifier)`，已经初始化了`usb_bus_type->p->bus_notifier`通过`blocking_notifier_chain_register`函数注册到通知链表。
 
-那什么时候usb总线收到通知呢？  
+那什么时候usb总线收到通知呢？
 
 - 当总线发现新的设备调用`device_add->blocking_notifier_call_chain(&dev->bus->p->bus_notifier, BUS_NOTIFY_ADD_DEVICE, dev)`
 
-- 当总线卸载设备时调用`device_del->blocking_notifier_call_chain(&dev->bus->p->bus_notifier,BUS_NOTIFY_DEL_DEVICE, dev);`  
+- 当总线卸载设备时调用`device_del->blocking_notifier_call_chain(&dev->bus->p->bus_notifier,BUS_NOTIFY_DEL_DEVICE, dev);`
 
 则调用`usb_bus_nb`的回调成员函数`notifier_call(usb_bus_notify)`，函数定义如下(drivers/usb/core/usb.c)：
 ```cpp
@@ -172,7 +172,7 @@ DebugFS，顾名思义，是一种用于内核调试的虚拟文件系统，内�
     		void *data)
     {
     	struct device *dev = data;
-    
+
     	switch (action) {
     	case BUS_NOTIFY_ADD_DEVICE:
     		if (dev->type == &usb_device_type)	//USB设备
@@ -180,7 +180,7 @@ DebugFS，顾名思义，是一种用于内核调试的虚拟文件系统，内�
     		else if (dev->type == &usb_if_device_type)	//接口设备
     			usb_create_sysfs_intf_files(to_usb_interface(dev));
     		break;
-    
+
     	case BUS_NOTIFY_DEL_DEVICE:
     		if (dev->type == &usb_device_type)
     			usb_remove_sysfs_dev_files(to_usb_device(dev));
@@ -193,7 +193,7 @@ DebugFS，顾名思义，是一种用于内核调试的虚拟文件系统，内�
 ```
 ### 2.4.4. usb_major_init
 注册字符设备，主设备号180.
-### 2.4.5. usb_register(&usbfs_driver): 
+### 2.4.5. usb_register(&usbfs_driver):
 ```cpp
     struct usb_driver usbfs_driver = {
     	.name =		"usbfs",
@@ -225,10 +225,10 @@ DebugFS，顾名思义，是一种用于内核调试的虚拟文件系统，内�
     			const char *mod_name)
     {
     	int retval = 0;
-    
+
     	if (usb_disabled())
     		return -ENODEV;
-    
+
     	new_driver->drvwrap.for_devices = 0;
     	new_driver->drvwrap.driver.name = new_driver->name;
     	new_driver->drvwrap.driver.bus = &usb_bus_type;
@@ -238,24 +238,24 @@ DebugFS，顾名思义，是一种用于内核调试的虚拟文件系统，内�
     	new_driver->drvwrap.driver.mod_name = mod_name;
     	spin_lock_init(&new_driver->dynids.lock);
     	INIT_LIST_HEAD(&new_driver->dynids.list);
-    
+
     	retval = driver_register(&new_driver->drvwrap.driver);
     	if (retval)
     		goto out;
-    
+
     	retval = usb_create_newid_files(new_driver);
     	if (retval)
     		goto out_newid;
-    
+
     	pr_info("%s: registered new interface driver %s\n",
     			usbcore_name, new_driver->name);
-    
+
     out:
     	return retval;
-    
+
     out_newid:
     	driver_unregister(&new_driver->drvwrap.driver);
-    
+
     	printk(KERN_ERR "%s: error %d registering interface "
     			"	driver %s\n",
     			usbcore_name, retval, new_driver->name);
@@ -289,7 +289,7 @@ drivers/usb/core/hub.c:
     	.id_table =	hub_id_table,
     	.supports_autosuspend =	1,
     };
-    
+
     int usb_hub_init(void)
     {
     	if (usb_register(&hub_driver) < 0) {
@@ -297,7 +297,7 @@ drivers/usb/core/hub.c:
     			usbcore_name);
     		return -1;
     	}
-    
+
     	/*
     	 * The workqueue needs to be freezable to avoid interfering with
     	 * USB-PERSIST port handover. Otherwise it might see that a full-speed
@@ -307,11 +307,11 @@ drivers/usb/core/hub.c:
     	hub_wq = alloc_workqueue("usb_hub_wq", WQ_FREEZABLE, 0);
     	if (hub_wq)
     		return 0;
-    
+
     	/* Fall through if kernel_thread failed */
     	usb_deregister(&hub_driver);
     	pr_err("%s: can't allocate workqueue for usb hub\n", usbcore_name);
-    
+
     	return -1;
     }
 ```
@@ -348,35 +348,35 @@ drivers/usb/core/hub.c:
     {
     	/* devices and interfaces are handled separately */
     	if (is_usb_device(dev)) {
-    
+
     		/* interface drivers never match devices */
     		if (!is_usb_device_driver(drv))
     			return 0;
-    
+
     		/* TODO: Add real matching code */
     		return 1;
-    
+
     	} else if (is_usb_interface(dev)) {
     		struct usb_interface *intf;
     		struct usb_driver *usb_drv;
     		const struct usb_device_id *id;
-    
+
     		/* device drivers never match interfaces */
     		if (is_usb_device_driver(drv))
     			return 0;
-    
+
     		intf = to_usb_interface(dev);
     		usb_drv = to_usb_driver(drv);
-    
+
     		id = usb_match_id(intf, usb_drv->id_table);
     		if (id)
     			return 1;
-    
+
     		id = usb_match_dynamic_id(intf, usb_drv);
     		if (id)
     			return 1;
     	}
-    
+
     	return 0;
     }
 ```
@@ -388,7 +388,7 @@ drivers/usb/core/hub.c:
     static int generic_probe(struct usb_device *udev)
     {
     	int err, c;
-    
+
     	/* Choose and set the configuration.  This registers the interfaces
     	 * with the driver core and lets interface drivers bind to them.
     	 */
@@ -408,7 +408,7 @@ drivers/usb/core/hub.c:
     	}
     	/* USB device state == configured ... usable */
     	usb_notify_add_device(udev);
-    
+
     	return 0;
     }
 ```
@@ -421,12 +421,12 @@ drivers/usb/core/hub.c:
     	struct usb_interface **new_interfaces = NULL;
     	struct usb_hcd *hcd = bus_to_hcd(dev->bus);
     	int n, nintf;
-    
+
         //找到对应的config并赋值给cp
     ……
     	if ((!cp && configuration != 0))
     		return -EINVAL;
-    
+
     	/* The USB spec says configuration 0 means unconfigured.
     	 * But if a device includes a configuration numbered 0,
     	 * we will accept it as a correctly configured state.
@@ -434,7 +434,7 @@ drivers/usb/core/hub.c:
     	 */
     	if (cp && configuration == 0)
     		dev_warn(&dev->dev, "config 0 descriptor??\n");
-    
+
     	/* Allocate memory for new interfaces before doing anything else,
     	 * so that if we run out then nothing will have changed. */
     	n = nintf = 0;
@@ -445,32 +445,32 @@ drivers/usb/core/hub.c:
     		new_interfaces = kmalloc(nintf * sizeof(*new_interfaces),
     				GFP_NOIO);
     		……
-    
+
     		for (; n < nintf; ++n) {
     			new_interfaces[n] = kzalloc(
     					sizeof(struct usb_interface),
     					GFP_NOIO);
     			……
     		}
-    
+
     		i = dev->bus_mA - usb_get_max_power(dev, cp);
     		……
     	}
-    
+
     	/* Wake up the device so we can send it the Set-Config request */
     	ret = usb_autoresume_device(dev);
     	if (ret)
     		goto free_interfaces;
-    
+
     	/* if it's already configured, clear out old state first.
     	 * getting rid of old interfaces means unbinding their drivers.
     	 */
     	if (dev->state != USB_STATE_ADDRESS)
     		usb_disable_device(dev, 1);	/* Skip ep0 */
-    
+
     	/* Get rid of pending async Set-Config requests for this device */
     	cancel_async_set_config(dev);
-    
+
     	/* Make sure we have bandwidth (and available HCD resources) for this
     	 * configuration.  Remove endpoints from the schedule if we're dropping
     	 * this configuration to set configuration 0.  After this point, the
@@ -487,7 +487,7 @@ drivers/usb/core/hub.c:
     	}
     	//alloc bandwidth用不到
     	……
-    
+
     	/*
     	 * Initialize the new interface structures and the
     	 * hc/hcd/usbcore interface/endpoint state.
@@ -511,23 +511,23 @@ drivers/usb/core/hub.c:
     			      USB_REQ_SET_CONFIGURATION, 0, configuration, 0,
     			      NULL, 0, USB_CTRL_SET_TIMEOUT);
     	……
-    
+
     	dev->actconfig = cp;
     	mutex_unlock(hcd->bandwidth_mutex);
-    
+
     	……
         //USB状态设置为CONFIGURED
     	usb_set_device_state(dev, USB_STATE_CONFIGURED);
-    
+
     	if (cp->string == NULL &&
     			!(dev->quirks & USB_QUIRK_CONFIG_INTF_STRINGS))
     		cp->string = usb_cache_string(dev, cp->desc.iConfiguration);
-    
+
     	/* Now that the interfaces are installed, re-enable LPM. */
     	usb_unlocked_enable_lpm(dev);
     	/* Enable LTM if it was turned off by usb_disable_device. */
     	usb_enable_ltm(dev);
-    
+
     	/* Now that all the interfaces are set up, register them
     	 * to trigger binding of drivers to interfaces.  probe()
     	 * routines may install different altsettings and may
@@ -536,7 +536,7 @@ drivers/usb/core/hub.c:
     	 */
     	for (i = 0; i < nintf; ++i) {
     		struct usb_interface *intf = cp->interface[i];
-    
+
     		dev_dbg(&dev->dev,
     			"adding %s (config #%d, interface %d)\n",
     			dev_name(&intf->dev), configuration,
@@ -550,7 +550,7 @@ drivers/usb/core/hub.c:
     		}
     		create_intf_ep_devs(intf);
     	}
-    
+
     	usb_autosuspend_device(dev);
     	return 0;
     }
@@ -572,9 +572,9 @@ drivers/usb/core/hub.c:
           .bInterfaceClass = USB_CLASS_HUB},
         { }						/* Terminating entry */
     };
-    
+
     MODULE_DEVICE_TABLE (usb, hub_id_table);
-    
+
     static struct usb_driver hub_driver = {
     	.name =		"hub",
     	.probe =	hub_probe,
@@ -598,7 +598,7 @@ drivers/usb/core/hub.c:
     	struct usb_endpoint_descriptor *endpoint;
     	struct usb_device *hdev;
     	struct usb_hub *hub;
-    
+
     	desc = intf->cur_altsetting;
     	hdev = interface_to_usbdev(intf);
     	……
@@ -607,27 +607,27 @@ drivers/usb/core/hub.c:
     			"Unsupported bus topology: hub nested too deep\n");
     		return -E2BIG;
     	}
-    
+
         ……
     	/* Multiple endpoints? What kind of mutant ninja-hub is this? */
     	if (desc->desc.bNumEndpoints != 1)
     		goto descriptor_error;
-    
+
     	endpoint = &desc->endpoint[0].desc;
-    
+
     	/* If it's not an interrupt in endpoint, we'd better punt! */
     	if (!usb_endpoint_is_int_in(endpoint))
     		goto descriptor_error;
-    
+
     	/* We found a hub */
     	dev_info (&intf->dev, "USB hub found\n");
-    
+
     	hub = kzalloc(sizeof(*hub), GFP_KERNEL);
     	if (!hub) {
     		dev_dbg (&intf->dev, "couldn't kmalloc hub struct\n");
     		return -ENOMEM;
     	}
-    
+
     	kref_init(&hub->kref);
     	hub->intfdev = &intf->dev;
     	hub->hdev = hdev;
@@ -636,20 +636,20 @@ drivers/usb/core/hub.c:
     	INIT_WORK(&hub->events, hub_event);
     	usb_get_intf(intf);
     	usb_get_dev(hdev);
-    
+
     	usb_set_intfdata (intf, hub);
     	intf->needs_remote_wakeup = 1;
     	pm_suspend_ignore_children(&intf->dev, true);
-    
+
     	if (hdev->speed == USB_SPEED_HIGH)
     		highspeed_hubs++;
-    
+
     	if (id->driver_info & HUB_QUIRK_CHECK_PORT_AUTOSUSPEND)
     		hub->quirk_check_port_auto_suspend = 1;
-    
+
     	if (hub_configure(hub, endpoint) >= 0)
     		return 0;
-    
+
     	hub_disconnect (intf);
     	return -ENODEV;
     }
@@ -677,7 +677,7 @@ drivers/usb/core/hub.c:
     	.probe = dwc2_driver_probe,
     	.remove = dwc2_driver_remove,
     };
-    
+
     module_platform_driver(dwc2_platform_driver);
 ```
 这个驱动的probe函数除了常规的从设备树中取出所需数据之外，还做了`lowlevel_hw_init`以及分析硬件参数。`Dwc2_of_match_table`里的data参数也是用来提供硬件参数的。Gadget模式下的DMA enable好像只能通过`params_sfax8`来开启，所以这个参数好像也无法去掉，否则可以直接使用从硬件里读出的数据。硬件参数读取之后又用`dwc2_set_parameters(hsotg, params);`来将`hsotg->core_params`设置为合适的值。然后重点在于`dwc2_gadget_init(hsotg, irq)`和`dwc2_hcd_init(hsotg, irq)`这两个函数，其中第一个函数实现了gadget模式的驱动初始化工作，第二个函数实现了host模式的驱动初始化工作。
@@ -704,7 +704,7 @@ drivers/usb/core/hub.c:
     	 * installed
     	 */
     	dwc2_disable_global_interrupts(hsotg);
-    
+
     	/* Initialize the DWC_otg core, and select the Phy type */
     	retval = dwc2_core_init(hsotg, true, irq);
     	……
@@ -716,10 +716,10 @@ drivers/usb/core/hub.c:
     		goto error2;
     	}
     	INIT_WORK(&hsotg->wf_otg, dwc2_conn_id_status_change);
-    
+
     	setup_timer(&hsotg->wkp_timer, dwc2_wakeup_detected,
     		    (unsigned long)hsotg);
-    
+
     	/* Initialize the non-periodic schedule */
     	……
     	/* Initialize the periodic schedule */
@@ -731,7 +731,7 @@ drivers/usb/core/hub.c:
     	……
     	/* Initialize hsotg start work */
     	INIT_DELAYED_WORK(&hsotg->start_work, dwc2_hcd_start_func);
-    
+
     	/* Initialize port reset work */
     	INIT_DELAYED_WORK(&hsotg->reset_work, dwc2_hcd_reset_func);
         ……
@@ -782,7 +782,7 @@ drivers/usb/core/hub.c:
     	else
     		hcd->authorized_default = authorized_default;
     	set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
-    
+
     	/* HC is in reset state, but accessible.  Now do the one-time init,
     	 * bottom up so that hcds can customize the root hubs before hub_wq
     	 * starts talking to them.  (Note, bus id is assigned early too.)
@@ -805,16 +805,16 @@ drivers/usb/core/hub.c:
     	mutex_unlock(&usb_port_peer_mutex);
     	……
     	hcd->rh_pollable = 1;
-    
+
     	/* NOTE: root hub and controller capabilities may not be the same */
     	if (device_can_wakeup(hcd->self.controller)
     			&& device_can_wakeup(&hcd->self.root_hub->dev))
     		dev_dbg(hcd->self.controller, "supports USB remote wakeup\n");
-    
+
     	/* initialize tasklets */
     	init_giveback_urb_bh(&hcd->high_prio_bh);
     	init_giveback_urb_bh(&hcd->low_prio_bh);
-    
+
     	/* enable irqs just before we start the controller,
     	 * if the BIOS provides legacy PCI irqs.
     	 */
@@ -823,19 +823,19 @@ drivers/usb/core/hub.c:
     		if (retval)
     			goto err_request_irq;
     	}
-    
+
     	hcd->state = HC_STATE_RUNNING;
     	retval = hcd->driver->start(hcd);
     	if (retval < 0) {
     		dev_err(hcd->self.controller, "startup error %d\n", retval);
     		goto err_hcd_driver_start;
     	}
-    
+
     	/* starting here, usbcore will pay attention to this root hub */
         //注册root hub
     	if ((retval = register_root_hub(hcd)) != 0)
     		goto err_register_root_hub;
-    
+
     	retval = sysfs_create_group(&rhdev->dev.kobj, &usb_bus_attr_group);
     	if (retval < 0) {
     		printk(KERN_ERR "Cannot register USB bus sysfs attributes: %d\n",
@@ -844,15 +844,15 @@ drivers/usb/core/hub.c:
     	}
     	if (hcd->uses_new_polling && HCD_POLL_RH(hcd))
     		usb_hcd_poll_rh_status(hcd);
-    
+
     	return retval;
     ……
     }
     EXPORT_SYMBOL_GPL(usb_add_hcd);
 ```
-注意这个函数里有一个`usb_register_bus`，这个函数注册的是`struct usb_bus`，用来表示设备的树状结构，每个host controller都可表示为一个`usb_bus`，其余设备以树状形式连接到这个bus上。这个bus和之前系统初始化时的`bus_register`的bus是两个东西，`bus_register`注册的是`struct bus_type`，表示linux设备模型中的一个类型，用来将同一类型的device和driver联系起来。  
-`usb_alloc_dev`是hub用来申请新USB设备时使用的，创建root hub时也能用这个函数。这个函数会申请一个新的usb_device，将dev的bus设为`usb_bus_type`，type设为`usb_device_type`，然后设置endpoint0的描述符，最后返回指向这个usb_device的指针。从这我们可以知道root hub其实是一个虚拟的设备。  
-`hcd->driver->start=_dwc2_hcd_start`，这个函数初始化controller和root hub，并做好host模式的初始化操作，该函数成功返回后就可进行host模式的操作了。  
+注意这个函数里有一个`usb_register_bus`，这个函数注册的是`struct usb_bus`，用来表示设备的树状结构，每个host controller都可表示为一个`usb_bus`，其余设备以树状形式连接到这个bus上。这个bus和之前系统初始化时的`bus_register`的bus是两个东西，`bus_register`注册的是`struct bus_type`，表示linux设备模型中的一个类型，用来将同一类型的device和driver联系起来。
+`usb_alloc_dev`是hub用来申请新USB设备时使用的，创建root hub时也能用这个函数。这个函数会申请一个新的usb_device，将dev的bus设为`usb_bus_type`，type设为`usb_device_type`，然后设置endpoint0的描述符，最后返回指向这个usb_device的指针。从这我们可以知道root hub其实是一个虚拟的设备。
+`hcd->driver->start=_dwc2_hcd_start`，这个函数初始化controller和root hub，并做好host模式的初始化操作，该函数成功返回后就可进行host模式的操作了。
 然后会把root hub注册进系统，完成之后整个驱动的probe过程就算结束了，可以开始进行正常的USB操作了。
 ## 2.7. Root Hub
 ### 2.7.1. register_root_hub
@@ -870,7 +870,7 @@ drivers/usb/core/hub.c:
     			sizeof usb_dev->bus->devmap.devicemap);
     	set_bit (devnum, usb_dev->bus->devmap.devicemap);
     	usb_set_device_state(usb_dev, USB_STATE_ADDRESS);
-    
+
     	mutex_lock(&usb_bus_list_lock);
         //读设备描述符
     	usb_dev->ep0.desc.wMaxPacketSize = cpu_to_le16(64);
@@ -893,13 +893,13 @@ drivers/usb/core/hub.c:
     		spin_lock_irq (&hcd_root_hub_lock);
     		hcd->rh_registered = 1;
     		spin_unlock_irq (&hcd_root_hub_lock);
-    
+
     		/* Did the HC die before the root hub was registered? */
     		if (HCD_DEAD(hcd))
     			usb_hc_died (hcd);	/* This time clean up */
     	}
     	mutex_unlock(&usb_bus_list_lock);
-    
+
     	return retval;
     }
 ```
@@ -951,7 +951,7 @@ drivers/usb/core/hub.c:
     	/* export the usbdev device-node for libusb */
     	udev->dev.devt = MKDEV(USB_DEVICE_MAJOR,
     			(((udev->bus->busnum-1) * 128) + (udev->devnum-1)));
-    
+
     	/* Tell the world! */
     	announce_device(udev);
     	……
@@ -964,7 +964,7 @@ drivers/usb/core/hub.c:
     		dev_err(&udev->dev, "can't device_add, error %d\n", err);
     		goto fail;
     	}
-    
+
     	/* Create link files between child device and usb port device. */
     	……
     	(void) usb_create_ep_devs(&udev->dev, &udev->ep0, udev);
@@ -974,9 +974,9 @@ drivers/usb/core/hub.c:
         ……
     }
 ```
-到这一步，root hub的设备描述符已经得到了，但是还有设置描述符，`usb_enumerate_device`会先读取完整的设置描述符（包括接口描述符和端点描述符），然后会继续读字符串描述符。读完之后放在`struct usb_device`的对应地方。然后直接调用`device_add`将设备添加进系统。  
-根据之前的分析，当`device_add`被调用的时候，系统会调用bus的match函数，由于我们之前将root hub的type赋值为`usb_device_type`，因此match的时候就会和`usb_generic_driver`匹配上，然后去调用`generic_probe`，由`usb_choose_configuration`和`usb_set_configuration`完成后续设置。  
-从root hub的设置描述符中我们可以知道root hub只有一个interface和一个endpoint，因此在`usb_set_configuration`里这个interface会匹配到`hub_driver`并执行`hub_probe`。  
+到这一步，root hub的设备描述符已经得到了，但是还有设置描述符，`usb_enumerate_device`会先读取完整的设置描述符（包括接口描述符和端点描述符），然后会继续读字符串描述符。读完之后放在`struct usb_device`的对应地方。然后直接调用`device_add`将设备添加进系统。
+根据之前的分析，当`device_add`被调用的时候，系统会调用bus的match函数，由于我们之前将root hub的type赋值为`usb_device_type`，因此match的时候就会和`usb_generic_driver`匹配上，然后去调用`generic_probe`，由`usb_choose_configuration`和`usb_set_configuration`完成后续设置。
+从root hub的设置描述符中我们可以知道root hub只有一个interface和一个endpoint，因此在`usb_set_configuration`里这个interface会匹配到`hub_driver`并执行`hub_probe`。
 `hub_probe`里有两个需要注意的地方，一个是`INIT_WORK(&hub->events, hub_event)`，一个是`hub_configure(hub, endpoint)`。首先，`INIT_WORK`把`hub->events`初始化成`hub_event`，我们再去看一下`hub_event`这个函数，发现是用来处理port/hub status change的一个函数，那么这个函数什么时候会被调到呢？答案在`hub_configure`这个函数里。
 ### 2.7.3. hub_configure
 ```cpp
@@ -998,7 +998,7 @@ drivers/usb/core/hub.c:
     		break;
     	    ……
     	}
-    
+
     	switch (wHubCharacteristics & HUB_CHAR_OCPM) {
     	……
     	case HUB_CHAR_INDV_PORT_OCPM:
@@ -1006,7 +1006,7 @@ drivers/usb/core/hub.c:
     		break;
     	……
     	}
-    
+
     	spin_lock_init (&hub->tt.lock);
     	INIT_LIST_HEAD (&hub->tt.clear_list);
     	INIT_WORK(&hub->tt.clear_work, hub_tt_work);
@@ -1023,7 +1023,7 @@ drivers/usb/core/hub.c:
         //hubstatus和hubchange返回值永远是0
     	ret = hub_hub_status(hub, &hubstatus, &hubchange);
     	……
-    
+
     	/* set up the interrupt endpoint
     	 * We use the EP's maxpacket size instead of (PORTS+1+7)/8
     	 * bytes as USB2.0[11.12.3] says because some hubs are known
@@ -1032,16 +1032,16 @@ drivers/usb/core/hub.c:
     	 * to be big enough for at least USB_MAXCHILDREN ports. */
     	pipe = usb_rcvintpipe(hdev, endpoint->bEndpointAddress);
     	maxp = usb_maxpacket(hdev, pipe, usb_pipeout(pipe));
-    
+
     	if (maxp > sizeof(*hub->buffer))
     		maxp = sizeof(*hub->buffer);
-    
+
     	hub->urb = usb_alloc_urb(0, GFP_KERNEL);
     	……
-    
+
     	usb_fill_int_urb(hub->urb, hdev, pipe, *hub->buffer, maxp, hub_irq,
     		hub, endpoint->bInterval);
-    
+
     	/* maybe cycle the hub leds */
     	if (hub->has_indicators && blinkenlights)
     		hub->indicator[0] = INDICATOR_CYCLE;
@@ -1053,20 +1053,20 @@ drivers/usb/core/hub.c:
     	}
     	hdev->maxchild = i;
     	……
-    
+
     	mutex_unlock(&usb_port_peer_mutex);
     	if (ret < 0)
     		goto fail;
-    
+
     	/* Update the HCD's internal representation of this hub before hub_wq
     	 * starts getting port status changes for devices under the hub.
     	 */
     	if (hcd->driver->update_hub_device) {
     		……
     	}
-    
+
     	usb_hub_adjust_deviceremovable(hdev, hub->descriptor);
-    
+
     	hub_activate(hub, HUB_INIT);
     	return 0;
     　　……
@@ -1076,17 +1076,17 @@ drivers/usb/core/hub.c:
 ```cpp
      init3:
     	hub->quiescing = 0;
-    
+
     	status = usb_submit_urb(hub->urb, GFP_NOIO);
     	if (status < 0)
     		dev_err(hub->intfdev, "activate --> %d\n", status);
     	if (hub->has_indicators && blinkenlights)
     		queue_delayed_work(system_power_efficient_wq,
     				&hub->leds, LED_CYCLE_PERIOD);
-    
+
     	/* Scan all ports that need attention */
     	kick_hub_wq(hub);
-    
+
     	/* Allow autosuspend if it was suppressed */
     	if (type <= HUB_INIT3)
     		usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
@@ -1101,12 +1101,12 @@ drivers/usb/core/hub.c:
     	retval = usb_hcd_link_urb_to_ep(hcd, urb);
     	if (retval)
     		goto done;
-    
+
     	hcd->status_urb = urb;
     	urb->hcpriv = hcd;	/* indicate it's queued */
     	if (!hcd->uses_new_polling)
     		mod_timer(&hcd->rh_timer, (jiffies/(HZ/4) + 1) * (HZ/4));
-    
+
     	/* If a status change has already occurred, report it ASAP */
     	else if (HCD_POLL_PENDING(hcd))
     		mod_timer(&hcd->rh_timer, jiffies);
@@ -1132,15 +1132,15 @@ drivers/usb/core/hub.c:
     	int		length;
     	unsigned long	flags;
     	char		buffer[6];	/* Any root hubs with > 31 ports? */
-    
+
     	if (unlikely(!hcd->rh_pollable))
     		return;
     	if (!hcd->uses_new_polling && !hcd->status_urb)
     		return;
-    
+
     	length = hcd->driver->hub_status_data(hcd, buffer);
     	if (length > 0) {
-    
+
     		/* try to complete the status urb */
     		spin_lock_irqsave(&hcd_root_hub_lock, flags);
     		urb = hcd->status_urb;
@@ -1149,7 +1149,7 @@ drivers/usb/core/hub.c:
     			hcd->status_urb = NULL;
     			urb->actual_length = length;
     			memcpy(urb->transfer_buffer, buffer, length);
-    
+
     			usb_hcd_unlink_urb_from_ep(hcd, urb);
     			usb_hcd_giveback_urb(hcd, urb, 0);
     		} else {
@@ -1158,7 +1158,7 @@ drivers/usb/core/hub.c:
     		}
     		spin_unlock_irqrestore(&hcd_root_hub_lock, flags);
     	}
-    
+
     	/* The USB 2.0 spec says 256 ms.  This is close enough and won't
     	 * exceed that limit if HZ is 100. The math is more clunky than
     	 * maybe expected, this is to make sure that all timers for USB devices
@@ -1181,7 +1181,7 @@ drivers/usb/core/hub.c:
     static int _dwc2_hcd_hub_status_data(struct usb_hcd *hcd, char *buf)
     {
     	struct dwc2_hsotg *hsotg = dwc2_hcd_to_hsotg(hcd);
-    
+
     	buf[0] = dwc2_hcd_is_status_changed(hsotg, 1) << 1;
     	return buf[0] != 0;
     }
@@ -1198,7 +1198,7 @@ drivers/usb/core/hub.c:
     	usb_lock_device(hdev);
     	if (unlikely(hub->disconnected))
     		goto out_hdev_lock;
-    
+
     	/* If the hub has died, clean up after it */
     	……
     	/* Autoresume */
@@ -1208,11 +1208,11 @@ drivers/usb/core/hub.c:
     	if (hub->error) {
     		……
     	}
-    
+
     	/* deal with port status changes */
     	for (i = 1; i <= hdev->maxchild; i++) {
     		struct usb_port *port_dev = hub->ports[i - 1];
-    
+
     		if (test_bit(i, hub->event_bits)
     				|| test_bit(i, hub->change_bits)
     				|| test_bit(i, hub->wakeup_bits)) {
@@ -1233,16 +1233,16 @@ drivers/usb/core/hub.c:
     			pm_runtime_put_sync(&port_dev->dev);
     		}
     	}
-    
+
     	/* deal with hub status changes */
     	……
-    
+
     out_autopm:
     	/* Balance the usb_autopm_get_interface() above */
     	usb_autopm_put_interface_no_suspend(intf);
     out_hdev_lock:
     	usb_unlock_device(hdev);
-    
+
     	/* Balance the stuff in kick_hub_wq() and allow autosuspend */
     	usb_autopm_put_interface(intf);
     	kref_put(&hub->kref, hub_release);
@@ -1250,24 +1250,24 @@ drivers/usb/core/hub.c:
 ```
 `hub_event`会先对每个port调用`port_event`处理port status change，然后再处理hub status change，对root hub来说不存在hub status change。`port_event`里面对针对port不同的情况进行不同的处理，如果有connect_change就会用`hub_port_connect_change->hub_port_connect`来进行新设备的处理，里面也是先后用了`usb_alloc_dev`和`usb_new_device`，至此，就重复之前添加新设备的过程，完成新设备的添加。
 # 3. 总结
-USB驱动架构如下图所示：  
-![figure2 USB驱动结构图](/assets/images/bsp/USB_2.png)  
+USB驱动架构如下图所示：
+![figure2 USB驱动结构图](/assets/images/bsp/USB_2.png)
 图 2 USB驱动结构图
 ## 3.1. USB主机端驱动
 
-![figure3 主机驱动架构](/assets/images/bsp/USB_3.png)  
+![figure3 主机驱动架构](/assets/images/bsp/USB_3.png)
 图 3 主机驱动架构
 
 　　　 USB核心(USBD)是整个USB驱动的核心部分，从上图可知，一方面USBD对接收到USB主机控制器的数据进行处理，并传递给上层的设备端驱动软件；同时也接收来自上层的非USB格式数据流，进行相应的数据处理后传递给USB主机控制器驱动。
 
-![figure4 主机驱动调度流程](/assets/images/bsp/USB_4.png)  
+![figure4 主机驱动调度流程](/assets/images/bsp/USB_4.png)
 图 4 主机驱动调度流程
 
 USB数据传输都以URB(USB Request Block)请求、URB生成、URB递交、URB释放为主线。从上图可知，当加载控制器驱动之后，注册根据集线器，hub和hcd驱动成为一个整体。接着，主机通过控制传输获取设备的控制描述符等信息，接着详述整个控制传输的流程。`usb_submit_urb`依据是否连接到根集线器来决定调用`urb_enqueue`或`rh_urb_enqueue`函数。
 
-USB从设备通过集线器或根集线器连接到USB主机上。比如：主机通过根集线器与外界进行数据交互，根集线器通过探测数据线状态的变化来通知USB主机是否有USB外围设备接入。  
-在主机端控制器驱动加载的过程中，注册了根集线器，然后匹配了相应的hub驱动程序，同时完成了对Hub的轮询函数和状态处理函数的设置。这样，一旦hub集线器的状态发生变化，就会产生相应的中断，主机端控制器就会执行相应的中断处理函数，下图为hub驱动程序的流程图。  
-![figure5 集线器驱动注册流程](/assets/images/bsp/USB_5.png)  
+USB从设备通过集线器或根集线器连接到USB主机上。比如：主机通过根集线器与外界进行数据交互，根集线器通过探测数据线状态的变化来通知USB主机是否有USB外围设备接入。
+在主机端控制器驱动加载的过程中，注册了根集线器，然后匹配了相应的hub驱动程序，同时完成了对Hub的轮询函数和状态处理函数的设置。这样，一旦hub集线器的状态发生变化，就会产生相应的中断，主机端控制器就会执行相应的中断处理函数，下图为hub驱动程序的流程图。
+![figure5 集线器驱动注册流程](/assets/images/bsp/USB_5.png)
 图 5 集线器驱动注册流程
 
 USB Core中的`usb_init()`函数中完成了对hub线程(`hub_wq`，在`usb_hub_init`函数中真正地创建)的创建，然后完成相应设备的探测。主机端控制器驱动进行探测时，将hub驱动和主机端控制器驱动结合在一起，相互之间完成调用。 相对于大容量存储设备与主机之间通过控制/批量传输，集线器与主机之间通过中断/控制方式完成数据交互。
@@ -1279,22 +1279,22 @@ USB Core中的`usb_init()`函数中完成了对hub线程(`hub_wq`，在`usb_hub_
 
 驱动的加载执行流程如下图所示：
 
-![figure6 USB初始化过程](/assets/images/bsp/USB_6.png)  
+![figure6 USB初始化过程](/assets/images/bsp/USB_6.png)
 图 6 USB初始化过程
 ### 3.2.1. USB Core的初始化
  USB驱动从USB子系统的初始化开始，USB子系统的初始化在文件driver/usb/core/usb.c
 ```cpp
-    subsys_initcall(usb_init);  
-    module_exit(usb_exit);  
+    subsys_initcall(usb_init);
+    module_exit(usb_exit);
 ```
 `subsys_initcall()`是一个宏，可以理解为`module_init()`。由于此部分代码非常重要，开发者把它看作一个子系统，而不仅仅是一个模块。USB Core这个模块代表的不是某一个设备，而是所有USB设备赖以生存的模块。在Linux中，像这样一个类别的设备驱动被归结为一个子系统。`subsys_initcall(usb_init)`告诉我们，`usb_init`才是真正的初始化函数，而`usb_exit`将是整个USB子系统结束时的清理函数。
 ### 3.2.2. 注册集线器
 ```cpp
     register_root_hub(hcd);
 ```
-在USB系统驱动加载的过程中，创建了集线器的线程(`hub_wq`)，并且一直查询相应的线程事务。HCD驱动中，将集线器作为一个设备添加到主机控制器驱动中，然后进行集线器端口的初始化。在USB主机看来，根集线器本身也是USB主机的设备。USB主机驱动加载完成之后，即开始注册根集线器，并且作为一个设备加载到主机驱动之中。  
-USB主机和USB设备之间进行数据交互，USB设备本身并没有总线控制权，U盘被动地接收USB主机发送过来的信息并做出响应。USB主机控制器与根集线器构成了主机系统，然后外接其它的USB设备。  
-为了更好地探测到根集线器的状态变化，USB主机控制器驱动增加了状态轮询函数，以一定的时间间隔轮询根集线器状态是否发生变化。一旦根集线器状态发生变化，主机控制器就会产生相应的响应。  
+在USB系统驱动加载的过程中，创建了集线器的线程(`hub_wq`)，并且一直查询相应的线程事务。HCD驱动中，将集线器作为一个设备添加到主机控制器驱动中，然后进行集线器端口的初始化。在USB主机看来，根集线器本身也是USB主机的设备。USB主机驱动加载完成之后，即开始注册根集线器，并且作为一个设备加载到主机驱动之中。
+USB主机和USB设备之间进行数据交互，USB设备本身并没有总线控制权，U盘被动地接收USB主机发送过来的信息并做出响应。USB主机控制器与根集线器构成了主机系统，然后外接其它的USB设备。
+为了更好地探测到根集线器的状态变化，USB主机控制器驱动增加了状态轮询函数，以一定的时间间隔轮询根集线器状态是否发生变化。一旦根集线器状态发生变化，主机控制器就会产生相应的响应。
 USB主机和USB设备之间的数据传输以URB(USB Request Block)的形式进行。
 
 ## 3.3. URB传输过程
@@ -1370,60 +1370,60 @@ URB初始化完成之后，USBD开始通过`usb_start_wait_urb()`提交urb请求
 #### 3.3.3.3. 批量传输
 `root_hub`本身没有批量传输流程，按照控制传输流程，控制传输最终要通过switch语句跳转到Bulk-Only传输流程中。
 
-# 4. USB驱动配置选项  
-## 4.1. kernel config  
-修改target/linux/siflower/sf19a28-fullmask/config-3.18_$(board)  
-添加如下config:  
-CONFIG_GENERIC_PHY=y  
-CONFIG_PHY_SFAX8_USB=y  
-CONFIG_USB=y  
-CONFIG_USB_COMMON=y  
-CONFIG_USB_DWC2=y  
-CONFIG_USB_DWC2_HOST=y  
-CONFIG_USB_EHCI_HCD=y  
-CONFIG_USB_OHCI_HCD=y  
-CONFIG_USB_OHCI_HCD_PLATFORM=y  
-CONFIG_USB_STORAGE=y  
-CONFIG_USB_SUPPORT=y  
-### 4.1.1. kernel dts  
-修改linux-4.14.90/arch/mips/boot/dts/siflower/sf18a28_fullmask_$(board).dts  
-打开usb：  
+# 4. USB驱动配置选项
+## 4.1. kernel config
+修改target/linux/siflower/sf19a28-fullmask/config-3.18_$(board)
+添加如下config:
+CONFIG_GENERIC_PHY=y
+CONFIG_PHY_SFAX8_USB=y
+CONFIG_USB=y
+CONFIG_USB_COMMON=y
+CONFIG_USB_DWC2=y
+CONFIG_USB_DWC2_HOST=y
+CONFIG_USB_EHCI_HCD=y
+CONFIG_USB_OHCI_HCD=y
+CONFIG_USB_OHCI_HCD_PLATFORM=y
+CONFIG_USB_STORAGE=y
+CONFIG_USB_SUPPORT=y
+### 4.1.1. kernel dts
+修改linux-4.14.90/arch/mips/boot/dts/siflower/sf18a28_fullmask_$(board).dts
+打开usb：
 ```
-&usb_phy{  
-       status = "okay";  
-};  
+&usb_phy{
+       status = "okay";
+};
 
-&usb {  
-       status = "okay";  
-};  
+&usb {
+       status = "okay";
+};
 ```
 ## 4.2. USB 自动挂载配置
-修改target/linux/siflower/sf19a28_$(board)_fullmask_def.config   
-添加如下config:  
-CONFIG_DEFAULT_badblocks=y  
-CONFIG_DEFAULT_block-mount=y  
-CONFIG_DEFAULT_kmod-fs-ext4=y  
-CONFIG_DEFAULT_kmod-fs-ntfs=y  
-CONFIG_DEFAULT_kmod-fs-vfat=y  
-CONFIG_DEFAULT_kmod-nls-base=y  
-CONFIG_DEFAULT_kmod-nls-cp437=y  
-CONFIG_DEFAULT_kmod-nls-cp850=y  
-CONFIG_DEFAULT_kmod-nls-cp936=y  
-CONFIG_DEFAULT_kmod-nls-cp950=y  
-CONFIG_DEFAULT_kmod-nls-iso8859-1=y  
-CONFIG_DEFAULT_kmod-nls-iso8859-15=y  
-CONFIG_DEFAULT_kmod-nls-utf8=y  
-CONFIG_DEFAULT_kmod-scsi-core=y  
-CONFIG_PACKAGE_block-mount=y  
-CONFIG_PACKAGE_kmod-scsi-core=y  
-CONFIG_PACKAGE_kmod-fs-ext4=y  
-CONFIG_PACKAGE_kmod-fs-ntfs=y  
-CONFIG_PACKAGE_kmod-fs-vfat=y  
-CONFIG_PACKAGE_kmod-nls-base=y  
-CONFIG_PACKAGE_kmod-nls-cp437=y  
-CONFIG_PACKAGE_kmod-nls-cp850=y  
-CONFIG_PACKAGE_kmod-nls-cp936=y  
-CONFIG_PACKAGE_kmod-nls-iso8859-1=y  
-CONFIG_PACKAGE_kmod-nls-iso8859-15=y  
-CONFIG_PACKAGE_kmod-nls-utf8=y  
-CONFIG_PACKAGE_badblocks=y  
+修改target/linux/siflower/sf19a28_$(board)_fullmask_def.config
+添加如下config:
+CONFIG_DEFAULT_badblocks=y
+CONFIG_DEFAULT_block-mount=y
+CONFIG_DEFAULT_kmod-fs-ext4=y
+CONFIG_DEFAULT_kmod-fs-ntfs=y
+CONFIG_DEFAULT_kmod-fs-vfat=y
+CONFIG_DEFAULT_kmod-nls-base=y
+CONFIG_DEFAULT_kmod-nls-cp437=y
+CONFIG_DEFAULT_kmod-nls-cp850=y
+CONFIG_DEFAULT_kmod-nls-cp936=y
+CONFIG_DEFAULT_kmod-nls-cp950=y
+CONFIG_DEFAULT_kmod-nls-iso8859-1=y
+CONFIG_DEFAULT_kmod-nls-iso8859-15=y
+CONFIG_DEFAULT_kmod-nls-utf8=y
+CONFIG_DEFAULT_kmod-scsi-core=y
+CONFIG_PACKAGE_block-mount=y
+CONFIG_PACKAGE_kmod-scsi-core=y
+CONFIG_PACKAGE_kmod-fs-ext4=y
+CONFIG_PACKAGE_kmod-fs-ntfs=y
+CONFIG_PACKAGE_kmod-fs-vfat=y
+CONFIG_PACKAGE_kmod-nls-base=y
+CONFIG_PACKAGE_kmod-nls-cp437=y
+CONFIG_PACKAGE_kmod-nls-cp850=y
+CONFIG_PACKAGE_kmod-nls-cp936=y
+CONFIG_PACKAGE_kmod-nls-iso8859-1=y
+CONFIG_PACKAGE_kmod-nls-iso8859-15=y
+CONFIG_PACKAGE_kmod-nls-utf8=y
+CONFIG_PACKAGE_badblocks=y
